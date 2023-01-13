@@ -37,11 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bruh.apps.BruhConfig',
-    'geoip2'
+    #'geoip2'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -126,10 +127,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = Path(BASE_DIR / 'media')
 
 GRAPPELLI_ADMIN_TITLE = 'Admin Panel'
 GRAPPELLI_ADMIN_HEADLINE = 'Admin Panel'
 AUTH_USER_MODEL = 'bruh.CustomUser'
-GEOIP_PATH = os.path.join(BASE_DIR, 'bruh')
+#GEOIP_PATH = os.path.join(BASE_DIR, 'bruh')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'spress61@live.com'

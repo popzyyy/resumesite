@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block content %}
-   <style>
+    <style>
         #smiley-circle {
             width: 60%;
             height: 30%;
@@ -10,9 +10,9 @@
             text-align: center;
             margin: auto;
             display: flex;
-            background-image: url({% static 'images/question.png' %});
+            background-image: url({% static 'images/SmileyFace01.svg' %});
             background-size: cover;
-            animation: spin 2s linear infinite;
+            animation: spin 5s linear infinite;
         }
 
         @keyframes spin {
@@ -27,17 +27,22 @@
             <h7>So Why Did I Make This Website?</h7>
             <div class="cards-container-slim">
                 <div class="article-card article-card-alt card-large">
+                    <h6 style="margin-top: 12%;
+                        margin-right: auto;
+                        margin-bottom: 12%;
+                        width: 90%;
+                        margin-left: auto;
+                        line-height: 1.8;">
+                        While this is mainly a front-end site and I am more skilled on the back-end, I always wanted
+                        a personal site, so here we are! In December 2022 I finished a dual degree program with an
+                        MBA and an MS in Management Information Systems. I am currently in the job market. My core
+                        experience is in Python, SQL, and Excel. My experience is kind of eclectic and I have
+                        experience with the military, as an account manager, in finance as an intern, and as an
+                        academic researcher. Since 2020, I have devoted my life to learning programming and data
+                        science while advancing in the Army Reserve and renovating my house. I love to learn,
+                        regardless of which subject is at hand. As soon as you think you know everything, you know
+                        nothing. </h6>
 
-
-                    <div class="article-card-content">
-
-                        <h6>My father purchased the domain stevenpress.com when I was born in 1996. Until I went through
-                            the MS in MIS program at University of Nebraska at Omaha, I did not know anything about
-                            programming. Now that I can program, I figured why not put the domain and my skills to use.
-                            I use this website as a resume and an informational. I have lived in and out of the Omaha,
-                            Nebraska area since 2007. I have lived in Nebraska, Kansas, Florida, Hawaii, Virginia, and
-                            Illinois. </h6>
-                    </div>
                 </div>
                 <div class="article-card article-card-alt card-small" onclick='location.href="{% url 'interests' %}";'>
                     <div class="article-card-content">
@@ -48,7 +53,7 @@
                 </div>
                 <div class="article-card article-card-alt card-small">
                     <div class="article-card-content">
-                            <img id="smiley-circle" width=60% height=60% src="{% static 'images/question.png' %}" alt="">
+                        <img id="smiley-circle" style=" max-width: 60%; max-height: 60%;" src="{% static 'images/SmileyFace01.svg' %}" alt="">
                     </div>
                 </div>
 
@@ -61,7 +66,7 @@
         const circle = document.getElementById('smiley-circle');
 
         setInterval(function () {
-            circle.style.animation = `spin ${60 / 20}s linear infinite`;
+            circle.style.animation = `spin ${100 / 20}s linear infinite`;
         }, 1000);
 
 

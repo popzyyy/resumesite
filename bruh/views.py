@@ -5,12 +5,13 @@ from django.http import HttpResponse
 from django.template import RequestContext
 from bruh.forms import ContactForm
 from bruh.models import *
-from django.contrib.gis.geoip2 import GeoIP2
+#from django.contrib.gis.geoip2 import GeoIP2
 from resumesite import settings
 
 
 
 def ip_get_bruh(request):
+    """
     try:
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
@@ -33,7 +34,7 @@ def ip_get_bruh(request):
     except:
         pass
 
-
+"""
 
 def refresh(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

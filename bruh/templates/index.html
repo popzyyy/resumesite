@@ -35,12 +35,12 @@
 
 <body>
 
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div style="margin-right: 2rem; display: flex; align-items: center;" class="container-fluid bruh">
         <img src="{% static 'images/image.jpg' %}" alt="" width="80" height="80"> <span style="display: inline-flex"
                                                                                         title="Steve is also fine">Steven D. Press</span>
     </div>
-  <div style="max-width: 30%"></div>
     <button class="navbar-toggler collapsed d-flex d-lg-none flex-column justify-content-around" type="button"
             data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
             aria-label="Toggle navigation">
@@ -101,6 +101,7 @@
     </div>
 
 </nav>
+</body>
 {% block content %}
 {% endblock %}
 <footer>
@@ -110,7 +111,7 @@
         </div>
         <div class="footer-right">
             <p class="footer-links"><a href="https://github.com/popzyyy" target="_blank" rel="noopener noreferrer">Github</a>
-                ◢◤ <a href="https://github.com/popzyyy" target="_blank" rel="noopener noreferrer">Social Media</a></p>
+                ◢◤ <a href="https://github.com/popzyyy/resumesite_root" target="_blank" rel="noopener noreferrer">Source</a></p>
         </div>
         <div class="clear"></div>
     </div>
@@ -122,36 +123,4 @@
 </body>
 </html>
 
-<script>// Get the modal
-var modal = document.getElementById("myModal");
 
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.querySelector(".close");
-
-// Check if the "modalShown" cookie exists
-if (!Cookies.get("modalShown")) {
-    // If the cookie doesn't exist, open the modal after 2 minutes
-    setTimeout(function () {
-        modal.style.display = "block";
-    }, 120000);
-
-    // Set the "modalShown" cookie to true
-    Cookies.set("modalShown", true);
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function () {
-    modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-    if (event.target === modal) {
-        modal.style.display = "none";
-    }
-}
-
-</script>
