@@ -1,0 +1,326 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body_neon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    background: #050801;
+    font-family: 'Copperplate Gothic', sans-serif;
+    font-weight: bold;
+}
+btn_neon{
+    position: relative;
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px 0;
+    color: rgb(255, 189, 0);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: 0.5s;
+    letter-spacing: 4px;
+    overflow: hidden;
+    margin-right: 15px;
+
+}
+btn_neon:hover{
+    background: #08FF72FF;
+    color: #08FF72FF;
+    box-shadow: 0 0 5px #08FF72FF,
+                0 0 8px #08FF72FF,
+                0 0 12px #08FF72FF,
+                0 0 16px #08FF72FF;
+     -webkit-box-reflect:below 1px linear-gradient(transparent, #08FF72FF);
+}
+
+a_neon{
+    position: relative;
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px 0;
+    color: rgb(255, 189, 0);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: 0.5s;
+    letter-spacing: 4px;
+    overflow: hidden;
+    margin-right: 15px;
+
+}
+
+a_neon:hover{
+    background: #08FF72FF;
+    color: #08FF72FF;
+    box-shadow: 0 0 5px #08FF72FF,
+                0 0 8px #08FF72FF,
+                0 0 12px #08FF72FF,
+                0 0 16px #08FF72FF;
+     -webkit-box-reflect:below 1px linear-gradient(transparent, #08FF72FF);
+}
+a_neon:nth-child(1){
+    filter: hue-rotate(270deg);
+}
+a_neon:nth-child(2){
+    filter: hue-rotate(110deg);
+}
+a_neon span{
+    position: absolute;
+    display: block;
+}
+a_neon span:nth-child(1){
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg,transparent, #08FF72FF);
+    animation: animate1 9s linear infinite;
+
+}
+@keyframes animate1{
+    0%{
+        left: -100%;
+    }
+    50%,100%{
+        left: 100%;
+    }
+}
+a_neon span:nth-child(2){
+    top: -100%;
+    right: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, #08FF72FF);
+    /*background: linear-gradient(180deg, transparent, #00ff66);*/
+    animation: animate2 9s linear infinite;
+    animation-delay: 0.00s;
+}
+@keyframes animate2{
+    0%{
+        top: -100%;
+    }
+    50%,100%{
+        top: 100%;
+    }
+}
+a_neon span:nth-child(3){
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(270deg,transparent, #08FF72FF);
+    animation: animate3 9s linear infinite;
+    animation-delay: 0.50s;
+}
+@keyframes animate3{
+    0%{
+        right: -100%;
+    }
+    50%,100%{
+        right: 100%;
+    }
+}
+
+
+a_neon span:nth-child(4){
+    bottom: -100%;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(360deg,transparent, #08FF72FF);
+    animation: animate4 9s linear infinite;
+    animation-delay: 0.75s;
+}
+@keyframes animate4{
+    0%{
+        bottom: -100%;
+    }
+    50%,100%{
+        bottom: 100%;
+    }
+}
+
+
+.navbar.navbar-4 .navbar-toggler-icon {
+  background-image: url('https://mdbootstrap.com/img/svg/hamburger7.svg?color=BFE100');
+}
+
+.bruh {
+    font-family: "Copperplate Gothic","Copperplate Gothic Light","Oxygen",sans-serif;
+    font-size: 32px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 36px;
+    color: #000000;
+}
+
+
+html, body {
+  margin: 0;
+}
+
+.cust_input {
+    margin-top: 20px;
+}
+
+body {
+  background: #f7f7f7;
+}
+/*contact form*/
+
+.form-box {
+    max-width: 500px;
+    margin: auto;
+    padding: 50px;
+    background: rgb(255, 255, 255);
+    border: 5px solid rgb(255, 255, 255);
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+h1, p {
+  text-align: center;
+}
+
+input, textarea {
+  width: 100%;
+}
+
+.iframe-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-top: 56%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+}
+
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+button {
+  margin: 20px;
+}
+.custom-btn-fard {
+  width: 100%;
+  height: 40px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+}
+/* 1 */
+.btn-1 {
+  background: rgb(60, 70, 255);
+  background: linear-gradient(0deg, rgb(9, 21, 203) 0%, rgba(12,25,180,1) 100%);
+  border: none;
+}
+.btn-1:hover {
+   background: rgb(0, 196, 255);
+background: linear-gradient(0deg, rgb(0, 217, 255) 0%, rgba(2,126,251,1) 100%);
+}
+
+
+.navbar-toggler {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    transition: .5s ease-in-out;
+}
+
+.navbar-toggler,
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler-icon:focus {
+    outline: none;
+    box-shadow: none;
+    border: 0;
+    position: relative;
+}
+
+.navbar-toggler span {
+    margin: 0;
+    padding: 0;
+}
+
+.toggler-icon {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.87);
+    border-radius: 1px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: .25s ease-in-out;
+}
+
+.middle-bar {
+    margin-top: 0px;
+}
+
+
+/* State when the navbar is collapsed */
+
+.navbar-toggler.collapsed .top-bar {
+    position: absolute;
+    top: 0px;
+    transform: rotate(0deg);
+}
+
+.navbar-toggler.collapsed .middle-bar {
+    opacity: 1;
+    position: absolute;
+    top: 10px;
+    filter: alpha(opacity=100);
+}
+
+.navbar-toggler.collapsed .bottom-bar {
+    position: absolute;
+    top: 20px;
+    transform: rotate(0deg);
+}
+
+/* when navigation is clicked */
+
+.navbar-toggler .top-bar {
+    top: inherit;
+    transform: rotate(135deg);
+}
+
+.navbar-toggler .middle-bar {
+    opacity: 0;
+    top: inherit;
+    filter: alpha(opacity=0);
+}
+
+.navbar-toggler .bottom-bar {
+    top: inherit;
+    transform: rotate(-135deg);
+}
+
+/* Color of 3 lines */
+
+.navbar-toggler.collapsed .toggler-icon {
+    background: linear-gradient( 263deg, rgb(206, 143, 6) 0%, rgb(244, 188, 3) 100% );
+}
