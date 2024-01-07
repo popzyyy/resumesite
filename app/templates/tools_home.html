@@ -1,0 +1,77 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+
+
+    <!-- Banner -->
+    <div id="banner-wrapper">
+        <div id="banner" class="box container">
+            <div class="row">
+                <div class="col-12 col-12-medium">
+                    <h2>Hi. Feel Free to Peruse</h2>
+                    <p>I built this site in my free time out of boredom, to stay fresh with my Python skills, and
+                        as a portfolio site. UNDER CONSTRUCTION.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Features -->
+    <div id="features-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-4 col-12-medium">
+
+                    <!-- Box -->
+                    <section class="box feature">
+                        <a href="#" class="image featured"><img src="{% static 'images/pic01.jpg' %}" alt=""/></a>
+                        <div class="inner">
+                            <header>
+                                <h2>Put something here</h2>
+                                <p>Maybe here as well I think</p>
+                            </header>
+                            <p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet
+                                bibendum tristique fringilla.</p>
+                        </div>
+                    </section>
+
+                </div>
+                <div class="col-4 col-12-medium">
+
+                    <!-- Box -->
+                    <section class="box feature">
+                        <a href="#" class="image featured"><img src="{% static 'images/pic02.jpg' %}" alt=""/></a>
+                        <div class="inner">
+                            <header>
+                                <h2>An interesting title</h2>
+                                <p>This is also an interesting subtitle</p>
+                            </header>
+                            <p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet
+                                bibendum tristique fringilla.</p>
+                        </div>
+                    </section>
+
+                </div>
+                <div class="col-4 col-12-medium">
+
+                    <!-- Box -->
+                    <section class="box feature">
+                        <a href="#" class="image featured"><img src="{% static 'images/pic03.jpg' %}" alt=""/></a>
+                        <div class="inner">
+                            <header>
+                                <h2>Oh, and finally ...</h2>
+                                <p>Here's another intriguing subtitle</p>
+                            </header>
+                            <p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet
+                                bibendum tristique fringilla.</p>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

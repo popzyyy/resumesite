@@ -37,7 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bruh.apps.BruhConfig',
-    #'geoip2'
+    'app',
+    'crispy_forms',
+    'crispy_bootstrap4',
+    'django_filters',
+    'import_export',
+    'mathfilters',
+    'django.contrib.humanize',
+    # 'geoip2'
 ]
 
 MIDDLEWARE = [
@@ -56,7 +63,7 @@ ROOT_URLCONF = 'resumesite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'bruh/templates']
+        'DIRS': [BASE_DIR / 'bruh/templates', BASE_DIR / 'app/templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -121,18 +128,26 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'bruh/static')
-#STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'bruh/static')
+# STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'app', 'static'),
+    os.path.join(BASE_DIR, 'bruh', 'static'),
+]
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = Path(BASE_DIR / 'media')
 
 GRAPPELLI_ADMIN_TITLE = 'Admin Panel'
 GRAPPELLI_ADMIN_HEADLINE = 'Admin Panel'
 AUTH_USER_MODEL = 'bruh.CustomUser'
-#GEOIP_PATH = os.path.join(BASE_DIR, 'bruh')
+# GEOIP_PATH = os.path.join(BASE_DIR, 'bruh')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'spress61@live.com'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# settings.py

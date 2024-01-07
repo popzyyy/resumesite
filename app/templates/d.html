@@ -1,0 +1,170 @@
+{% extends 'main.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% block content %}
+
+    <style>
+        .formset-container {
+            display: block;
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+        }
+
+        /* Center the form */
+        #form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Center the table */
+        table {
+            margin: 0 auto;
+        }
+    </style>
+    <div id="features-wrapper">
+        <div class="container">
+            <div class="row">
+            <h2 class="text-center">Inflation Calculator</h2>
+            </div>
+                <div class="col-4 col-12-medium">
+
+                    <!-- Box -->
+                    <section class="box feature">
+                        <a href="#" class="image featured"><img src="{% static 'images/pic01.jpg' %}" alt=""/></a>
+                        <div class="inner">
+                            <header>
+                                <h2>Put something here</h2>
+                                <p>Maybe here as well I think</p>
+                            </header>
+                            <p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet
+                                bibendum tristique fringilla.</p>
+                        </div>
+                    </section>
+
+                </div>
+                <div class="col-4 col-12-medium">
+
+                    <!-- Box -->
+                    <section class="box feature">
+                        <a href="#" class="image featured"><img src="{% static 'images/pic02.jpg' %}" alt=""/></a>
+                        <div class="inner">
+                            <header>
+                                <form id="form-container" class="row" method="POST">
+                                    {% csrf_token %}
+                                    <div class="fieldWrapper">
+                                        <div class="formset-container">
+                                            <div class="row">
+                                                <div style="padding-bottom: 10px" class="form-container">
+
+
+                                                    <p style="font-size: 2em">
+                                                        <b>{{ inflationform.start_money.label }}:</b> {{ inflationform.start_money }}
+                                                    </p>
+
+
+                                                </div>
+                                            </div>
+
+                                            <p style="display: flex; flex-direction: column; align-items: center; font-size: 1.2em">
+                                                <b>
+                                                    in </b></p>
+
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label for="{{ inflationform.month_start.id_for_label }}">{{ inflationform.month_start.label }}</label>
+                                                    {{ inflationform.month_start }}
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="{{ inflationform.year_start.id_for_label }}">{{ inflationform.year_start.label }}</label>
+                                                    {{ inflationform.year_start }}
+                                                </div>
+                                            </div>
+
+                                            {% if not end_muney %}
+                                                <br><br><br>
+                                            {% endif %}
+                                            {% if end_muney %}
+                                                <p style="display: flex; flex-direction: column; align-items: center;padding-top: .75em; font-size: 1em">
+                                                    <b>
+                                                        is the same as</b></p>
+                                                <p style="display: flex; flex-direction: column; align-items: center;padding-top: .75em; font-size: 1em">
+                                                    <b>
+                                                        ${{ end_muney | floatformat:2 }}</b></p>
+                                                <p style="display: flex; flex-direction: column; align-items: center;padding-top: .75em; font-size: 1em">
+                                                    <b>
+                                                        in</b></p>
+                                            {% endif %}
+
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label for="{{ inflationform.month_end.id_for_label }}">{{ inflationform.month_end.label }}</label>
+                                                    {{ inflationform.month_end }}
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="{{ inflationform.year_end.id_for_label }}">{{ inflationform.year_end.label }}</label>
+                                                    {{ inflationform.year_end }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit">Submit</button>
+
+                                </form>
+                            </header>
+                        </div>
+                    </section>
+
+                </div>
+                <div class="col-4 col-12-medium">
+
+                    <!-- Box -->
+                    <section class="box feature">
+                        <a href="#" class="image featured"><img src="{% static 'images/pic03.jpg' %}" alt=""/></a>
+                        <div class="inner">
+                            <header>
+                                <h2>Oh, and finally ...</h2>
+                                <p>Here's another intriguing subtitle</p>
+                            </header>
+                            <p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet
+                                bibendum tristique fringilla.</p>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+           <div class="row">
+                <p style="display: flex; flex-direction: row; align-content: flex-start; font-size: 1.2em"><strong>Filter
+                    by: {{ inflationform.month_selection }}</strong></p>
+
+            </div>
+            <br>
+            <table class="table">
+                <thead>
+
+                <tr>
+                    <th>Year</th>
+                    <th>Month</th>
+                    <th>CPI Index</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in data %}
+                    <tr>
+                        <td>{{ item.year }}</td>
+                        <td>{{ item.month }}</td>
+                        <td>{{ item.inflation_rate }}</td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

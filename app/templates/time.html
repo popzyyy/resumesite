@@ -1,0 +1,147 @@
+{% extends 'main.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% block content %}
+    <style>
+        .formset-container {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 20px;
+        }
+
+        .textarea {
+            width: 100%;
+            height: 15em;
+            margin: 2px;
+            padding: 2em;
+            border: 0;
+        }
+
+        #id_text {
+            outline: 3px solid black;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <div id="banner-wrapper">
+        <div id="banner" class="box container">
+            <h2>Date Calculator</h2>
+            <div class="row">
+                <div class="col-6">
+                    <h4>Calculate Between Dates</h4>
+                    <form style="padding-top: 1.5em;" id="form-container" method="POST">
+                        {% csrf_token %}
+                        {{ timeform.error }}
+
+                        <div class="formset-container">
+                            {{ dateform.date1 }}
+                            {% for error in dateform.date1.errors %}
+                                <li><b>{{ error }}</b></li>
+                            {% endfor %}
+                        </div>
+
+                        <div class="formset-container">
+                            {{ dateform.date2 }}
+                            {% for error in dateform.date2.errors %}
+                                <li><b>{{ error }}</b></li>
+                            {% endfor %}
+                        </div>
+
+                        <div class="row">
+                            <div style="padding-top: 4em; display: inline-block;">
+                                <button class="button" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                {% if date_dif_years or date_dif_months or date_dif_days %}
+                    <div class="col-6">
+                        <div class="col-12 col-12-medium">
+                            <h5>Result</h5>
+                            {% if date_dif_years %}
+                                <p style="font-size: 1.5em;">Years: {{ date_dif_years }}</p>
+                            {% endif %}
+                            {% if date_dif_months %}
+                                <p style="font-size: 1.5em;">Months: {{ date_dif_months }}</p>
+                            {% endif %}
+                            {% if date_dif_days %}
+                                <p style="font-size: 1.5em;">Days: {{ date_dif_days }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+
+            <!--CALCULATE BETWEEN DATES -->
+
+            <div class="row">
+                <h4>Add or Subtract Dates</h4>
+                <div class="col-12">
+
+                    <form style="padding-top: 1.5em;" id="form-container" method="POST">
+                        {% csrf_token %}
+                        {{ timeform.error }}
+
+                        <div class="formset-container">
+                            <label for="{{ dateform2.date_between.id_for_label }}">{{ dateform2.date_between.label }}</label>
+                            {{ dateform2.date_between }}
+                            {% for error in dateform2.date_between.errors %}
+                                <li><b>{{ error }}</b></li>
+                            {% endfor %}
+                        </div>
+
+                        <div class="formset-container">
+                            <label for="{{ dateform2.math_type.id_for_label }}">{{ dateform2.math_type.label }}</label>
+                            {{ dateform2.math_type }}
+                            {% for error in dateform2.math_type.errors %}
+                                <li><b>{{ error }}</b></li>
+                            {% endfor %}
+                        </div>
+
+                        <div class="formset-container">
+
+                            <label for="{{ dateform2.day.id_for_label }}">{{ dateform2.day.label }}</label>
+                            <p style="padding-left:.1em; padding-top: .5em; font-size: 1.25em;">{{ dateform2.day }} </p>
+                            {% for error in dateform2.day.errors %}
+                                <li><b>{{ error }}</b></li>
+                            {% endfor %}
+                        </div>
+                        <div class="formset-container">
+
+                            <label for="{{ dateform2.month.id_for_label }}">{{ dateform2.month.label }}</label>
+                            <p style="padding-left:.1em; padding-top: .5em; font-size: 1.25em;">{{ dateform2.month }}</p>
+                            {% for error in dateform2.month.errors %}
+                                <li><b>{{ error }}</b></li>
+                            {% endfor %}
+                        </div>
+                        <div class="formset-container">
+                            <label for="{{ dateform2.year.id_for_label }}">{{ dateform2.year.label }}</label>
+                            <p style="padding-left:.1em; padding-top: .5em; font-size: 1.25em;">{{ dateform2.year }} </p>
+                            {% for error in dateform2.year.errors %}
+                                <li><b>{{ error }}</b></li>
+                            {% endfor %}
+                        </div>
+                    {% if new_date %}
+                        <div class="formset-container">
+                            <h5>Result</h5>
+                            <p style="font-size: 1.5em;">{{ new_date }}</p>
+                        </div>
+                    {% endif %}
+                        <div class="row">
+                            <div style="padding-top: 4em; display: inline-block;">
+                                <button class="button" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
