@@ -1,0 +1,66 @@
+{% extends 'main.html' %}
+{% load user_agents %}
+{% load static %}
+{% block content %}
+    <style>
+        .formset-container {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 20px;
+        }
+
+
+        .textarea {
+            width: 100%;
+            height: 15em; /* Adjust the height value as needed */
+            margin: 2px;
+            padding: 2em;
+            border: 0;
+
+        }
+
+    </style>
+    <!-- Banner -->
+    <div id="banner-wrapper">
+        <div id="banner" class="box container">
+            <div class="row">
+                <div class="container mt-5">
+                    <h2>Your Info:</h2>
+
+                    <section class="box feature">
+                        <div class="inner">
+                            <h3>IP Address: {{ ip }}</h3>
+                            <h3>Country: {{ country }}</h3>
+                            <h3>State: {{ state }}</h3>
+                            <h3>City: {{ city }}</h3>
+                            {% if request|is_pc %}
+                                <h3>You are on a PC</h3>
+                            {% endif %}
+                            {% if request|is_touch_capable %}
+                                <h3>Your device is touch capable</h3>
+                            {% endif %}
+                            {% if request|is_mobile %}
+                                <h3>You are on mobile</h3>
+                            {% endif %}
+                            {% if request|is_tablet %}
+                                <h3>You are on a tablet</h3>
+                            {% endif %}
+                            {% if browser_type  and browser_version == '' %}
+                                <h3>Browser: {{ browser_type }}</h3>
+                            {% endif %}
+                            {% if browser_type and browser_version != '' %}
+                                <h3>Browser: {{ browser_type }} Version {{ browser_version }}</h3>
+                            {% endif %}
+
+                            <header>
+
+                            </header>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
