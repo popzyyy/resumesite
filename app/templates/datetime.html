@@ -1,5 +1,4 @@
 {% extends 'main.html' %}
-{% load crispy_forms_filters %}
 {% load static %}
 {% block content %}
     <style>
@@ -25,7 +24,6 @@
                     <form style="padding-top: 1.5em;" id="form-container" method="POST">
                         {% csrf_token %}
 
-
                         <div class="formset-container">
                             {{ dateform2.date_math }}
                             {% for error in dateform.date_math.errors %}
@@ -40,18 +38,15 @@
                     </form>
                 </div>
 
-                    <div class="col-6">
-                        <div class="col-12 col-12-medium">
-                            <h5>Result:</h5>
-                            {{ dateform.math_type }}
-                            {% if date_dif_months %}
-                                <p style="font-size: 1.5em;">Months: {{ date_dif_months }}</p>
-                            {% endif %}
-
-
-                        </div>
+                <div class="col-6">
+                    <div class="col-12 col-12-medium">
+                        <h5>Result:</h5>
+                        {{ dateform.math_type }}
+                        {% if date_dif_months %}
+                            <p style="font-size: 1.5em;">Months: {{ date_dif_months }}</p>
+                        {% endif %}
                     </div>
-
+                </div>
             </div>
         </div>
     </div>

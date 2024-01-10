@@ -49,10 +49,6 @@ class LineForm(forms.Form):
 
 
 class DateForm(forms.Form):
-    year = datetime.datetime.now().year
-    initial_date = datetime.date(year, 1, 1)
-    initial_date_min_one = datetime.date(year - 1, 12, 31)
-
     date1 = forms.DateField(widget=forms.SelectDateWidget(years=range(1, 2250), attrs={'style': 'width: 10em;'}))
     date2 = forms.DateField(widget=forms.SelectDateWidget(years=range(1, 2250), attrs={'style': 'width: 10em;'}))
 

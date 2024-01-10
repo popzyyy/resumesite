@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'import_export',
     'mathfilters',
     'django.contrib.humanize',
-    # 'geoip2'
+    'geoip2',
+    'django_user_agents',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 ROOT_URLCONF = 'resumesite.urls'
@@ -141,7 +143,7 @@ MEDIA_ROOT = Path(BASE_DIR / 'media')
 GRAPPELLI_ADMIN_TITLE = 'Admin Panel'
 GRAPPELLI_ADMIN_HEADLINE = 'Admin Panel'
 AUTH_USER_MODEL = 'bruh.CustomUser'
-# GEOIP_PATH = os.path.join(BASE_DIR, 'bruh')
+GEOIP_PATH = os.path.join(BASE_DIR, 'bruh')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'spress61@live.com'
 

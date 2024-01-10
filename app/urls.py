@@ -17,7 +17,7 @@ urlpatterns = [
     path('onelinemaker/', views.line, name='line'),
     path('datecalculation/', views.date, name='date'),
     path('timecalculation/', views.time, name='time'),
-
+    path('ipaddress/', views.ipaddress, name='ipaddress'),
 ]
 
 if settings.DEBUG:

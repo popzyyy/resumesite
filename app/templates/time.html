@@ -1,5 +1,4 @@
 {% extends 'main.html' %}
-{% load crispy_forms_filters %}
 {% load static %}
 {% block content %}
     <style>
@@ -32,7 +31,7 @@
                     <h4>Calculate Between Dates</h4>
                     <form style="padding-top: 1.5em;" id="form-container" method="POST">
                         {% csrf_token %}
-                        {{ timeform.error }}
+                        {{ dateform.error }}
 
                         <div class="formset-container">
                             {{ dateform.date1 }}

@@ -8,6 +8,7 @@ import json
 import requests
 import datetime
 from dateutil.relativedelta import relativedelta
+from django.contrib.gis.geoip2 import GeoIP2
 
 
 def refresh(request):
@@ -30,6 +31,37 @@ def calculators(request):
     getipaddress(request)
 
     return render(request, 'calculators.html')
+
+
+def getipaddress_return(request):
+    try:
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+    except:
+        ip = ''
+
+        return ip
+
+
+def ipaddress(request):
+    ip = getipaddress_return(request)
+    g = GeoIP2()
+    ip = '97.119.174.121'
+    data = g.city(str(ip))
+
+    city = data['city']
+    state = data['region']
+    country = data['country_name']
+
+    browser_type = request.user_agent.browser.family
+    browser_version = request.user_agent.browser.version_string
+
+    return render(request, 'ipaddress.html',
+                  {'browser_version': browser_version, 'browser_type': browser_type, 'ip': ip,
+                   'city': city, 'state': state, 'country': country})
 
 
 def time(request):
@@ -60,12 +92,13 @@ def date(request):
     dateform = DateForm(request.POST)
     dateform2 = DateForm2(request.POST)
 
-    print(request.POST)
+    request.session.set_expiry(300)
 
     if request.method == "POST":
+
+        # FORM 1 ON TOP
         if 'date1_month' in request.POST:
             if dateform.is_valid():
-                print('date1')
                 date1 = dateform.cleaned_data.get('date1')
                 date2 = dateform.cleaned_data.get('date2')
 
@@ -75,20 +108,33 @@ def date(request):
                 date_dif_months = abs(date_difference.months)
                 date_dif_days = abs(date_difference.days)
 
-                dateform = DateForm(
-                    {"date_between": datetime.date.today(), "date1": datetime.date.today(),
-                     "date2": datetime.date.today() - datetime.timedelta(days=364)})
+                request.session.set_expiry(300)
 
-                dateform2 = DateForm2(
-                    {"day": 0, "month": 0, "year": 0, "math_type": "Add", "date_between": datetime.date.today()})
+                request.session['date1'] = date1.strftime('%Y-%m-%d')
+                request.session['date2'] = date2.strftime('%Y-%m-%d')
+
+
+
+                dateform = DateForm(
+                    {"date_between": datetime.date.today(), "date1": request.session['date1'],
+                     "date2": request.session['date2']})
+
+                if 'day' in request.session and 'date_between' in request.session:
+                    dateform2 = DateForm2(
+                        {"day": request.session['math_days'], "month": request.session['math_months'],
+                         "year": request.session['math_years'], "math_type": request.session['math_type'],
+                         "date_between": request.session['date_between']})
+                else:
+                    # Default values if 'day' or 'date_between' is not in session
+                    dateform2 = DateForm2(
+                        {"day": 0, "month": 0, "year": 0, "math_type": "Add", "date_between": datetime.date.today()})
 
                 return render(request, 'time.html',
                               {'dateform': dateform, 'dateform2': dateform2, 'date_dif_months': date_dif_months,
                                'date_dif_days': date_dif_days,
                                'date_dif_years': date_dif_years})
-
+        # FORM 2 ON BOTTOM
         if 'date_between_month' in request.POST:
-            print('date2')
             if dateform2.is_valid():
                 math_type = dateform2.cleaned_data.get('math_type')
                 date_between = dateform2.cleaned_data.get('date_between')
@@ -101,6 +147,18 @@ def date(request):
                 orig_months = dateform2.cleaned_data.get('date_between').month
                 orig_years = dateform2.cleaned_data.get('date_between').year
 
+                request.session['day'] = orig_days
+                request.session['month'] = orig_months
+                request.session['year'] = orig_years
+
+                request.session['math_type'] = math_type
+
+                request.session['math_days'] = math_days
+                request.session['math_months'] = math_months
+                request.session['math_years'] = math_years
+
+                request.session['date_between'] = date_between.strftime('%Y-%m-%d')
+
                 if math_type == 'Add':
                     new_date = datetime.date(year=orig_years, month=orig_months, day=orig_days) + relativedelta(
                         days=math_days, months=math_months, years=math_years)
@@ -110,28 +168,49 @@ def date(request):
                         days=math_days, months=math_months, years=math_years)
                     new_date = new_date.strftime('%B %d, %Y')
 
+                if 'date1' in request.session and 'date2' in request.session:
+                    dateform = DateForm(
+                        {"date_between": datetime.date.today(), "date1": request.session['date1'],
+                         "date2": request.session['date2']})
+                else:
+                    dateform = DateForm(
+                        {"date_between": datetime.date.today(), "date1": datetime.date.today(),
+                         "date2": datetime.date.today() - datetime.timedelta(days=364)})
 
-
-                dateform = DateForm(
-                    {"date_between": datetime.date.today(), "date1": datetime.date.today(),
-                     "date2": datetime.date.today() - datetime.timedelta(days=364)})
-
-                dateform2 = DateForm2(
-                    {"day": 0, "month": 0, "year": 0, "math_type": "Add", "date_between": datetime.date.today()})
+                if 'day' in request.session and 'date_between' in request.session:
+                    dateform2 = DateForm2(
+                        {"day": request.session['math_days'], "month": request.session['math_months'],
+                         "year": request.session['math_years'], "math_type": request.session['math_type'],
+                         "date_between": request.session['date_between']})
+                else:
+                    dateform2 = DateForm2(
+                        {"day": 0, "month": 0, "year": 0, "math_type": "Add", "date_between": datetime.date.today()})
 
                 return render(request, 'time.html',
-                              {'new_date': new_date, 'dateform2': dateform2, 'dateform': dateform, 'math_type': math_type,
+                              {'new_date': new_date, 'dateform2': dateform2, 'dateform': dateform,
+                               'math_type': math_type,
                                'date_between': date_between})
 
 
-
+    # DEFAULT
     else:
-        dateform = DateForm(
-            {"date_between": datetime.date.today(), "date1": datetime.date.today(),
-             "date2": datetime.date.today() - datetime.timedelta(days=364)})
+        if 'date1' in request.session and 'date2' in request.session:
+            dateform = DateForm(
+                {"date_between": datetime.date.today(), "date1": request.session['date1'],
+                 "date2": request.session['date2']})
+        else:
+            dateform = DateForm(
+                {"date_between": datetime.date.today(), "date1": datetime.date.today(),
+                 "date2": datetime.date.today() - datetime.timedelta(days=364)})
 
-        dateform2 = DateForm2(
-            {"day": 0, "month": 0, "year": 0, "math_type": "Add", "date_between": datetime.date.today()})
+        if 'day' in request.session and 'date_between' in request.session:
+            dateform2 = DateForm2(
+                {"day": request.session['math_days'], "month": request.session['math_months'],
+                 "year": request.session['math_years'], "math_type": request.session['math_type'],
+                 "date_between": request.session['date_between']})
+        else:
+            dateform2 = DateForm2(
+                {"day": 0, "month": 0, "year": 0, "math_type": "Add", "date_between": datetime.date.today()})
 
     return render(request, 'time.html', {'dateform': dateform, 'dateform2': dateform2})
 
