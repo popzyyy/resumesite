@@ -12,6 +12,8 @@ from django.contrib.gis.geoip2 import GeoIP2
 from ipware import get_client_ip
 from datetime import date
 
+
+
 def refresh(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
