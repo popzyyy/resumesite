@@ -110,7 +110,7 @@ def ipaddress(request):
     ip = getipaddress(request)
     print(ip)
     g = GeoIP2()
-    #ip = '97.119.174.121'
+    ip = '97.119.174.121'
     data = g.city(str(ip))
 
     city = data['city']
