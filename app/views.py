@@ -10,7 +10,6 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from django.contrib.gis.geoip2 import GeoIP2
 from ipware import get_client_ip
-from geoip2.errors import AddressNotFoundError
 
 
 def refresh(request):
@@ -36,86 +35,64 @@ def calculators(request):
 
 
 def getipaddress(request):
-    #ip = get_client_ip(request)
-    try:
-        print(request.META.get('REMOTE_ADDR'))
-        if "HTTP_X_FORWARDED_FOR" in request.META.get('HTTP_X_FORWARDED_FOR'):
-            ip = request.META.get('HTTP_X_FORWARDED_FOR')
-        elif "X_FORWARDED_FOR" in request.META.get('X_FORWARDED_FOR'):
-            ip = request.META.get('X_FORWARDED_FOR')
-        elif "HTTP_CLIENT_IP" in request.META.get('HTTP_CLIENT_IP'):
-            ip = request.META.get('HTTP_CLIENT_IP')
-        elif "HTTP_X_REAL_IP" in request.META.get('HTTP_X_REAL_IP'):
-            ip = request.META.get('HTTP_X_REAL_IP')
-        elif "HTTP_X_FORWARDED" in request.META.get('HTTP_X_FORWARDED'):
-            ip = request.META.get('HTTP_X_FORWARDED')
-        elif "HTTP_X_CLUSTER_CLIENT_IP" in request.META.get('HTTP_X_CLUSTER_CLIENT_IP'):
-            ip = request.META.get('HTTP_X_CLUSTER_CLIENT_IP')
-        elif "HTTP_FORWARDED_FOR" in request.META.get('HTTP_FORWARDED_FOR'):
-            ip = request.META.get('HTTP_FORWARDED_FOR')
-        elif "HTTP_FORWARDED" in request.META.get('HTTP_FORWARDED'):
-            ip = request.META.get('HTTP_FORWARDED')
-        elif "HTTP_VIA" in request.META.get('HTTP_VIA'):
-            ip = request.META.get('HTTP_VIA')
-        elif "CLIENT" in request.META.get('CLIENT'):
-            ip = request.META.get('CLIENT')
-        elif "REAL" in request.META.get('REAL'):
-            ip = request.META.get('REAL')
-        elif "X-CLUSTER-CLIENT-IP" in request.META.get('X-CLUSTER-CLIENT-IP'):
-            ip = request.META.get('X-CLUSTER-CLIENT-IP')
-        elif "X_FORWARDED" in request.META.get('X_FORWARDED'):
-            ip = request.META.get('X_FORWARDED')
-        elif "FORWARDED_FOR" in request.META.get('FORWARDED_FOR'):
-            ip = request.META.get('FORWARDED_FOR')
-        elif "CONNECTING" in request.META.get('CONNECTING'):
-            ip = request.META.get('CONNECTING')
-        elif "TRUE-CLIENT-IP" in request.META.get('TRUE-CLIENT-IP'):
-            ip = request.META.get('TRUE-CLIENT-IP')
-        elif "CLIENT" in request.META.get('CLIENT'):
-            ip = request.META.get('CLIENT')
-        elif "FASTLY-CLIENT-IP" in request.META.get('FASTLY-CLIENT-IP'):
-            ip = request.META.get('FASTLY-CLIENT-IP')
-        elif "FORWARDED" in request.META.get('FORWARDED'):
-            ip = request.META.get('FORWARDED')
-        elif "CLIENT-IP" in request.META.get('CLIENT-IP'):
-            ip = request.META.get('CLIENT-IP')
-        elif "REMOTE_ADDR" in request.META.get('REMOTE_ADDR'):
-            ip = request.META.get('REMOTE_ADDR')
-        else:
-            ip = "98.102.0.1"
+    client_ip = get_client_ip(request)
+    if client_ip is not None:
+        # We got the client's IP address
+        try:
+            g = GeoIP2()
+            data = g.city(client_ip)
+            exists = Visitor.objects.filter(ipaddress=client_ip).exists()
+            if not exists:
+                city = data['city']
+                state = data['region']
+                country = data['country_name']
+                lat = data['latitude']
+                long = data['longitude']
+                zipcode = data['postal_code']
+                bruh = Visitor(ipaddress=client_ip, city=city, state=state, country=country, latitude=lat,
+                               longitude=long,
+                               zipcode=zipcode)
+                bruh.save()
 
-        g = GeoIP2()
-        data = g.city(ip)
-        exists = Visitor.objects.filter(ipaddress=ip).exists()
-        if not exists:
-            city = data['city']
-            state = data['region']
-            country = data['country_name']
-            lat = data['latitude']
-            long = data['longitude']
-            zipcode = data['postal_code']
-            bruh = Visitor(ipaddress=ip, city=city, state=state, country=country, latitude=lat, longitude=long,
-                           zipcode=zipcode)
-            bruh.save()
+                return client_ip
+        except:
+            try:
+                if not Visitor.objects.filter(ipaddress=client_ip).exists():
+                    bruh = Visitor(ipaddress=client_ip)
+                    bruh.save()
 
-            return ip
-    except:
-        raise AddressNotFoundError(
-            "IP Address Does Not Exist SAD! :("
-        )
+                    return client_ip
+            except:
+                pass
 
+    if client_ip is None:
+        try:
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                client_ip = x_forwarded_for.split(',')[0]
+                return client_ip
+
+            else:
+                client_ip = request.META.get('REMOTE_ADDR')
+                return client_ip
+        except:
+            pass
 
 
 def ipaddress(request):
     ip = getipaddress(request)
-    print(ip)
-    g = GeoIP2()
-    ip = '97.119.174.121'
-    data = g.city(str(ip))
 
-    city = data['city']
-    state = data['region']
-    country = data['country_name']
+    g = GeoIP2()
+    # ip = '97.119.174.121'
+    try:
+        data = g.city(str(ip))
+        city = data['city']
+        state = data['region']
+        country = data['country_name']
+    except:
+        city = 'Unable to Retrieve'
+        state = 'Unable to Retrieve'
+        country = 'Unable to Retrieve'
 
     browser_type = request.user_agent.browser.family
     browser_version = request.user_agent.browser.version_string
@@ -488,11 +465,14 @@ def getipaddress(request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             ip = x_forwarded_for.split(',')[0]
+
         else:
             ip = request.META.get('REMOTE_ADDR')
 
         if not Visitor.objects.filter(ipaddress=ip).exists():
             bruh = Visitor(ipaddress=ip)
             bruh.save()
+
+        return ip
     except:
         pass
