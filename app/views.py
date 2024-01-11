@@ -10,7 +10,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from django.contrib.gis.geoip2 import GeoIP2
 from ipware import get_client_ip
-
+from datetime import date
 
 def refresh(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
@@ -195,14 +195,23 @@ def date(request):
 
                 request.session['date_between'] = date_between.strftime('%Y-%m-%d')
 
+                min_valid_date = datetime.date(year=1, month=1, day=1)
+                max_valid_date = datetime.date(year=9999, month=12, day=31)
+
                 if math_type == 'Add':
-                    new_date = datetime.date(year=orig_years, month=orig_months, day=orig_days) + relativedelta(
+                    date_test = datetime.date(year=orig_years, month=orig_months, day=orig_days) + relativedelta(
                         days=math_days, months=math_months, years=math_years)
-                    new_date = new_date.strftime('%B %d, %Y')
+                    if not (min_valid_date <= date_test <= max_valid_date):
+                        dateform2.add_error(math_years, "Please select a valid date range.")
+
+                    new_date = date_test.strftime('%B %d, %Y')
+
                 elif math_type == 'Subtract':
-                    new_date = datetime.date(year=orig_years, month=orig_months, day=orig_days) - relativedelta(
+                    date_test = datetime.date(year=orig_years, month=orig_months, day=orig_days) - relativedelta(
                         days=math_days, months=math_months, years=math_years)
-                    new_date = new_date.strftime('%B %d, %Y')
+                    if not (min_valid_date <= date_test <= max_valid_date):
+                        dateform2.add_error(math_years, "Please select a valid date range.")
+                    new_date = date_test.strftime('%B %d, %Y')
 
                 if 'date1' in request.session and 'date2' in request.session:
                     dateform = DateForm(

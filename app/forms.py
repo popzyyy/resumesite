@@ -60,9 +60,9 @@ class DateForm2(forms.Form):
     date_between = forms.DateField(label='Start Date', initial=datetime.datetime.now(),
                                    widget=forms.SelectDateWidget(years=range(1, 2250), attrs={'style': 'width: 10em;'}))
 
-    day = forms.IntegerField(label='Days', min_value=0, max_value=999999, widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
-    month = forms.IntegerField(label='Months', min_value=0, max_value=999999, widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
-    year = forms.IntegerField(label='Years', min_value=0, max_value=999999, widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
+    day = forms.IntegerField(label='Days', min_value=0, max_value=99999, widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
+    month = forms.IntegerField(label='Months', min_value=0, max_value=9999, widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
+    year = forms.IntegerField(label='Years', min_value=0, max_value=9000, widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
 
 
 class TimeForm(forms.Form):

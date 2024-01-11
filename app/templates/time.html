@@ -129,6 +129,15 @@
                             <p style="font-size: 1.5em;">{{ new_date }}</p>
                         </div>
                     {% endif %}
+                     {% if dateform2.year.errors %}
+                                                <div class="col-md-6">
+                                                    <ul>
+                                                        {% for error in dateform2.year.errors %}
+                                                            <li><b>{{ error }}</b></li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            {% endif %}
                         <div class="row">
                             <div style="padding-top: 4em; display: inline-block;">
                                 <button class="button" type="submit">Submit</button>
@@ -136,10 +145,6 @@
                         </div>
                     </form>
                 </div>
-
-
-
-
             </div>
         </div>
     </div>
