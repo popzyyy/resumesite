@@ -9,6 +9,8 @@ import requests
 import datetime
 from dateutil.relativedelta import relativedelta
 from django.contrib.gis.geoip2 import GeoIP2
+from ipware import get_client_ip
+from geoip2.errors import AddressNotFoundError
 
 
 def refresh(request):
@@ -33,23 +35,82 @@ def calculators(request):
     return render(request, 'calculators.html')
 
 
-def getipaddress_return(request):
+def getipaddress(request):
+    #ip = get_client_ip(request)
     try:
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
+        print(request.META.get('REMOTE_ADDR'))
+        if "HTTP_X_FORWARDED_FOR" in request.META.get('HTTP_X_FORWARDED_FOR'):
+            ip = request.META.get('HTTP_X_FORWARDED_FOR')
+        elif "X_FORWARDED_FOR" in request.META.get('X_FORWARDED_FOR'):
+            ip = request.META.get('X_FORWARDED_FOR')
+        elif "HTTP_CLIENT_IP" in request.META.get('HTTP_CLIENT_IP'):
+            ip = request.META.get('HTTP_CLIENT_IP')
+        elif "HTTP_X_REAL_IP" in request.META.get('HTTP_X_REAL_IP'):
+            ip = request.META.get('HTTP_X_REAL_IP')
+        elif "HTTP_X_FORWARDED" in request.META.get('HTTP_X_FORWARDED'):
+            ip = request.META.get('HTTP_X_FORWARDED')
+        elif "HTTP_X_CLUSTER_CLIENT_IP" in request.META.get('HTTP_X_CLUSTER_CLIENT_IP'):
+            ip = request.META.get('HTTP_X_CLUSTER_CLIENT_IP')
+        elif "HTTP_FORWARDED_FOR" in request.META.get('HTTP_FORWARDED_FOR'):
+            ip = request.META.get('HTTP_FORWARDED_FOR')
+        elif "HTTP_FORWARDED" in request.META.get('HTTP_FORWARDED'):
+            ip = request.META.get('HTTP_FORWARDED')
+        elif "HTTP_VIA" in request.META.get('HTTP_VIA'):
+            ip = request.META.get('HTTP_VIA')
+        elif "CLIENT" in request.META.get('CLIENT'):
+            ip = request.META.get('CLIENT')
+        elif "REAL" in request.META.get('REAL'):
+            ip = request.META.get('REAL')
+        elif "X-CLUSTER-CLIENT-IP" in request.META.get('X-CLUSTER-CLIENT-IP'):
+            ip = request.META.get('X-CLUSTER-CLIENT-IP')
+        elif "X_FORWARDED" in request.META.get('X_FORWARDED'):
+            ip = request.META.get('X_FORWARDED')
+        elif "FORWARDED_FOR" in request.META.get('FORWARDED_FOR'):
+            ip = request.META.get('FORWARDED_FOR')
+        elif "CONNECTING" in request.META.get('CONNECTING'):
+            ip = request.META.get('CONNECTING')
+        elif "TRUE-CLIENT-IP" in request.META.get('TRUE-CLIENT-IP'):
+            ip = request.META.get('TRUE-CLIENT-IP')
+        elif "CLIENT" in request.META.get('CLIENT'):
+            ip = request.META.get('CLIENT')
+        elif "FASTLY-CLIENT-IP" in request.META.get('FASTLY-CLIENT-IP'):
+            ip = request.META.get('FASTLY-CLIENT-IP')
+        elif "FORWARDED" in request.META.get('FORWARDED'):
+            ip = request.META.get('FORWARDED')
+        elif "CLIENT-IP" in request.META.get('CLIENT-IP'):
+            ip = request.META.get('CLIENT-IP')
+        elif "REMOTE_ADDR" in request.META.get('REMOTE_ADDR'):
             ip = request.META.get('REMOTE_ADDR')
-    except:
-        ip = ''
+        else:
+            ip = "98.102.0.1"
 
-        return ip
+        g = GeoIP2()
+        data = g.city(ip)
+        exists = Visitor.objects.filter(ipaddress=ip).exists()
+        if not exists:
+            city = data['city']
+            state = data['region']
+            country = data['country_name']
+            lat = data['latitude']
+            long = data['longitude']
+            zipcode = data['postal_code']
+            bruh = Visitor(ipaddress=ip, city=city, state=state, country=country, latitude=lat, longitude=long,
+                           zipcode=zipcode)
+            bruh.save()
+
+            return ip
+    except:
+        raise AddressNotFoundError(
+            "IP Address Does Not Exist SAD! :("
+        )
+
 
 
 def ipaddress(request):
-    ip = getipaddress_return(request)
+    ip = getipaddress(request)
+    print(ip)
     g = GeoIP2()
-    ip = '97.119.174.121'
+    #ip = '97.119.174.121'
     data = g.city(str(ip))
 
     city = data['city']
@@ -112,8 +173,6 @@ def date(request):
 
                 request.session['date1'] = date1.strftime('%Y-%m-%d')
                 request.session['date2'] = date2.strftime('%Y-%m-%d')
-
-
 
                 dateform = DateForm(
                     {"date_between": datetime.date.today(), "date1": request.session['date1'],
