@@ -68,11 +68,33 @@ def getipaddress(request):
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
             if x_forwarded_for:
                 client_ip = x_forwarded_for.split(',')[0]
-                return client_ip
+
 
             else:
                 client_ip = request.META.get('REMOTE_ADDR')
-                return client_ip
+
+            try:
+                g = GeoIP2()
+                data = g.city(client_ip)
+                exists = Visitor.objects.filter(ipaddress=client_ip).exists()
+                if not exists:
+                    city = data['city']
+                    state = data['region']
+                    country = data['country_name']
+                    zipcode = data['postal_code']
+                    bruh = Visitor(ipaddress=client_ip, city=city, state=state, country=country, zipcode=zipcode)
+                    bruh.save()
+
+                    return client_ip
+            except:
+                try:
+                        if not Visitor.objects.filter(ipaddress=client_ip).exists():
+                            bruh = Visitor(ipaddress=client_ip)
+                            bruh.save()
+
+                            return client_ip
+                except:
+                    pass
         except:
             pass
 
@@ -467,3 +489,19 @@ class GPACalc(TemplateView):
         return self.render_to_response({'formset': formset})
 
 
+def getipaddress(request):
+    try:
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+
+        if not Visitor.objects.filter(ipaddress=ip).exists():
+            bruh = Visitor(ipaddress=ip)
+            bruh.save()
+
+        return ip
+    except:
+        pass
