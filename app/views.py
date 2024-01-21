@@ -488,7 +488,7 @@ class GPACalc(TemplateView):
 
         return self.render_to_response({'formset': formset})
 
-
+'''
 def getipaddress(request):
     try:
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -505,3 +505,4 @@ def getipaddress(request):
         return ip
     except:
         pass
+'''
