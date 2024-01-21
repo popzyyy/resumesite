@@ -18,7 +18,13 @@ def refresh(request):
 
 class Visitor(models.Model):
     id = models.BigAutoField(primary_key=True, editable=False)
-    ipaddress = models.TextField(max_length=150, blank=True)
+    ipaddress = models.TextField(max_length=150, null=True, blank=True)
+    city = models.TextField(max_length=150, null=True, blank=True)
+    state = models.TextField(max_length=150, null=True, blank=True)
+    country = models.TextField(max_length=150, null=True,  blank=True)
+    latitude = models.DecimalField(max_digits=15, decimal_places=12, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=15, decimal_places=12, null=True,  blank=True)
+    zipcode = models.IntegerField(null= True, blank=True)
     when_visited = models.DateTimeField(default=timezone.now)
 
 
