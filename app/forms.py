@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import ModelForm, Textarea, TextInput, formset_factory, modelformset_factory, BaseModelFormSet, \
     NumberInput
 from app.models import *
-
+from django.db.models import Max
 
 class GPAForm(forms.ModelForm):
     class Meta:
@@ -35,11 +35,13 @@ class InflationForm(forms.Form):
         ("November", "November"), ("December", "December")
     ]
 
+    max_year = Inflation.objects.aggregate(Max('year'))['year__max']
+
     start_money = forms.DecimalField(initial=1, label='$', min_value=.01, decimal_places=2, max_digits=18)
     month_start = forms.ChoiceField(choices=end_month_choices, initial="January", label='')
     year_start = forms.TypedChoiceField(choices=year_choice, coerce=int, initial="2000", label='')
     month_end = forms.ChoiceField(choices=start_month_choices, initial="January", label='')
-    year_end = forms.TypedChoiceField(choices=year_choice, coerce=int, initial=year - 1, label='')
+    year_end = forms.TypedChoiceField(choices=year_choice, coerce=int, initial=max_year, label='')
 
 
 class LineForm(forms.Form):
@@ -68,3 +70,8 @@ class DateForm2(forms.Form):
 class TimeForm(forms.Form):
     timefield1 = forms.DateTimeField(widget=forms.SplitDateTimeWidget(attrs={'style': 'width: 10em;'}))
     timefield2 = forms.DateTimeField(widget=forms.SplitDateTimeWidget(attrs={'style': 'width: 10em;'}))
+
+
+class DeathForm(forms.Form):
+    death_time = forms.DateTimeField(widget=forms.SplitDateTimeWidget(attrs={'style': 'width: 10em;'}))
+

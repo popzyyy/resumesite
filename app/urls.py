@@ -16,8 +16,10 @@ urlpatterns = [
     path('calculators/', views.calculators, name='calculators'),
     path('onelinemaker/', views.line, name='line'),
     path('datecalculation/', views.date, name='date'),
-    path('timecalculation/', views.time, name='time'),
+    path('timecalculation/', views.time_view, name='time'),
+    path('between_dates/', views.between_dates, name='between_dates'),
     path('ipaddress/', views.ipaddress, name='ipaddress'),
+    path('memento_mori/', views.grim_reaper, name='grim'),
 ]
 
 if settings.DEBUG:

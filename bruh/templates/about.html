@@ -20,6 +20,12 @@
                 transform: rotate(360deg);
             }
         }
+        .hover-button {
+            cursor: pointer;
+        }
+        .hover-button:hover{
+            background-color: mediumblue;
+        }
 
     </style>
     <section class="featured-articles-section-dark">
@@ -28,33 +34,35 @@
             <div class="cards-container-slim">
                 <div class="article-card article-card-alt card-large">
                     <div class="article-card-content">
-                    <h6 style="margin-top: 12%;
+                        <h6 style="margin-top: 2%;
                         margin-right: auto;
                         margin-bottom: 12%;
                         width: 90%;
                         margin-left: auto;
                         line-height: 1.8;">
-                        While this is mainly a front-end site and I am more skilled on the back-end, I always wanted
-                        a personal site, so here we are! In December 2022 I finished a dual degree program with an
-                        MBA and an MS in Management Information Systems. I am currently in the job market. My core
-                        experience is in Python, SQL, SAS, and Excel. I love to learn, regardless of which subject is at hand.
-                        As soon as you think you know everything, you know nothing. </h6>
+                            I originally made this site in 2022 to maybe help land a job after grad school.
+                            I have since worked as a Data Engineer, Software Engineer, and Cyber/Space Ops Officer in
+                            the Army Reserve
+                            I now use this site as a way to keep up my programming skills in Python, Django, Javascript,
+                            HTML/CSS, etc.
+                            Always open to new job opportunities.
+                        </h6>
                     </div>
 
                 </div>
                 <div class="article-card article-card-alt card-small" onclick='location.href="{% url 'interests' %}";'>
-                    <div class="article-card-content">
+                    <div class="article-card-content hover-button" >
 
                         <h4>Personal Interests</h4>
                         <p>Informal</p>
                     </div>
                 </div>
-                <div class="article-card article-card-alt card-small">
-                    <div class="article-card-content">
-                        <p>
-                        <img id="smiley-circle" style=" max-width: 60%; max-height: 60%;" src="{% static 'images/SmileyFace01.svg' %}" alt="">
-                        </p>
-                    </div>
+                <div class="article-card article-card-alt card-small" style="display: flex;justify-content: center; align-items: center; height: 100%; text-align: center;">
+                    <p>
+                        <img id="smiley-circle" style=" max-width: 60%; max-height: 60%;"
+                             src="{% static 'images/SmileyFace01.svg' %}" alt="">
+                    </p>
+
                 </div>
 
                 <br class="clear"/>

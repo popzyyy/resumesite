@@ -1,17 +1,20 @@
+import random
 from _decimal import Decimal
 from dateutil import relativedelta
 from django.shortcuts import render
+from django.utils.timezone import now
 from django.views.generic import TemplateView
 from app.forms import *
 from app.models import *
 import json
 import requests
-import datetime
 from dateutil.relativedelta import relativedelta
 from django.contrib.gis.geoip2 import GeoIP2
 from ipware import get_client_ip
-from datetime import date
-
+from django.core.paginator import Paginator
+import time
+from datetime import datetime as dt, timedelta
+from tzlocal import get_localzone
 
 
 def refresh(request):
@@ -88,11 +91,11 @@ def getipaddress(request):
                     return client_ip
             except:
                 try:
-                        if not Visitor.objects.filter(ipaddress=client_ip).exists():
-                            bruh = Visitor(ipaddress=client_ip)
-                            bruh.save()
+                    if not Visitor.objects.filter(ipaddress=client_ip).exists():
+                        bruh = Visitor(ipaddress=client_ip)
+                        bruh.save()
 
-                            return client_ip
+                        return client_ip
                 except:
                     pass
         except:
@@ -122,8 +125,61 @@ def ipaddress(request):
                    'city': city, 'state': state, 'country': country})
 
 
-def time(request):
+def grim_reaper(request):
+    ip = getipaddress(request)
+    death_form = DeathForm(request.POST)
+
+    if Death.objects.filter(ipaddress=ip, death_time__isnull=False).exists():
+        print("EXISTS")
+        object = Death.objects.get(ipaddress=ip)
+        time_db = object.death_time
+        return render(request, 'grim.html',
+                      {'ip': ip,'time_db':time_db})
+
+    if not Death.objects.filter(ipaddress=ip, death_time__isnull=False).exists():
+        print("NOT EXISTS. NO FORM")
+        if request.method == "POST":
+            print("NOT EXISTS. FORM")
+            min_time = now() + relativedelta(months=+6)
+            max_time = now() + relativedelta(years=+5)
+
+            time_range_seconds = int((max_time - min_time).total_seconds())
+            random_time = random.randint(0, time_range_seconds)
+
+            random_datetime = min_time + timedelta(seconds=random_time)
+            time_db = random_datetime.strftime("%Y-%m-%d %H:%M:%S")
+
+
+
+            object = Death(ipaddress=ip, death_time=time_db)
+            object.save()
+
+            time_db = object.death_time
+            return render(request, 'grim.html',
+                          {'ip': ip, 'time_db': time_db})
+
+
+
+
+
+
+    return render(request, 'grim.html',
+                  {'ip': ip})
+
+
+def time_view(request):
     timeform = TimeForm(request.POST)
+
+    '''time_nanosec = time.time_ns()
+    epoch_seconds = time_nanosec / 1_000_000_000
+    whole_seconds = int(epoch_seconds)
+    remainder_nanoseconds = time_nanosec % 1_000_000_000
+
+    local_tz = get_localzone()
+    timestamp = dt.fromtimestamp(whole_seconds, tz=local_tz)
+
+    readable = timestamp.strftime("%Y-%m-%d %H:%M:%S") + f".{remainder_nanoseconds:09d}"'''
+
     if request.method == "POST":
         if timeform.is_valid():
             date1 = timeform.cleaned_data.get('date1')
@@ -135,18 +191,18 @@ def time(request):
             date_dif_months = abs(date_difference.months)
             date_dif_days = abs(date_difference.days)
 
-            return render(request, 'datetime.html',
+            return render(request, 'time.html',
                           {'timeform': timeform, 'date_dif_months': date_dif_months, 'date_dif_days': date_dif_days,
                            'date_dif_years': date_dif_years})
 
     else:
         timeform = TimeForm(
-            {"date1": datetime.date.today(), "date2": datetime.date.today() - datetime.timedelta(days=364)})
+            {"date1": datetime.date.today(), "date2": datetime.date.today()})
 
-    return render(request, 'datetime.html', {'timeform': timeform})
+    return render(request, 'time.html', {'timeform': timeform})
 
 
-def date(request):
+def between_dates(request):
     dateform = DateForm(request.POST)
     dateform2 = DateForm2(request.POST)
 
@@ -154,41 +210,6 @@ def date(request):
 
     if request.method == "POST":
 
-        # FORM 1 ON TOP
-        if 'date1_month' in request.POST:
-            if dateform.is_valid():
-                date1 = dateform.cleaned_data.get('date1')
-                date2 = dateform.cleaned_data.get('date2')
-
-                date_difference = relativedelta(date1, date2)
-
-                date_dif_years = abs(date_difference.years)
-                date_dif_months = abs(date_difference.months)
-                date_dif_days = abs(date_difference.days)
-
-                request.session.set_expiry(300)
-
-                request.session['date1'] = date1.strftime('%Y-%m-%d')
-                request.session['date2'] = date2.strftime('%Y-%m-%d')
-
-                dateform = DateForm(
-                    {"date_between": datetime.date.today(), "date1": request.session['date1'],
-                     "date2": request.session['date2']})
-
-                if 'day' in request.session and 'date_between' in request.session:
-                    dateform2 = DateForm2(
-                        {"day": request.session['math_days'], "month": request.session['math_months'],
-                         "year": request.session['math_years'], "math_type": request.session['math_type'],
-                         "date_between": request.session['date_between']})
-                else:
-                    # Default values if 'day' or 'date_between' is not in session
-                    dateform2 = DateForm2(
-                        {"day": 0, "month": 0, "year": 0, "math_type": "Add", "date_between": datetime.date.today()})
-
-                return render(request, 'time.html',
-                              {'dateform': dateform, 'dateform2': dateform2, 'date_dif_months': date_dif_months,
-                               'date_dif_days': date_dif_days,
-                               'date_dif_years': date_dif_years})
         # FORM 2 ON BOTTOM
         if 'date_between_month' in request.POST:
             if dateform2.is_valid():
@@ -251,7 +272,7 @@ def date(request):
                     dateform2 = DateForm2(
                         {"day": 0, "month": 0, "year": 0, "math_type": "Add", "date_between": datetime.date.today()})
 
-                return render(request, 'time.html',
+                return render(request, 'between_dates.html',
                               {'new_date': new_date, 'dateform2': dateform2, 'dateform': dateform,
                                'math_type': math_type,
                                'date_between': date_between})
@@ -277,7 +298,75 @@ def date(request):
             dateform2 = DateForm2(
                 {"day": 0, "month": 0, "year": 0, "math_type": "Add", "date_between": datetime.date.today()})
 
-    return render(request, 'time.html', {'dateform': dateform, 'dateform2': dateform2})
+    return render(request, 'between_dates.html', {'dateform': dateform, 'dateform2': dateform2})
+
+
+def date(request):
+    dateform = DateForm(request.POST)
+    dateform2 = DateForm2(request.POST)
+
+    request.session.set_expiry(300)
+
+    if request.method == "POST":
+
+        # FORM 1 ON TOP
+        if 'date1_month' in request.POST:
+            if dateform.is_valid():
+                date1 = dateform.cleaned_data.get('date1')
+                date2 = dateform.cleaned_data.get('date2')
+
+                date_difference = relativedelta(date1, date2)
+
+                date_dif_years = abs(date_difference.years)
+                date_dif_months = abs(date_difference.months)
+                date_dif_days = abs(date_difference.days)
+
+                request.session.set_expiry(300)
+
+                request.session['date1'] = date1.strftime('%Y-%m-%d')
+                request.session['date2'] = date2.strftime('%Y-%m-%d')
+
+                dateform = DateForm(
+                    {"date_between": datetime.date.today(), "date1": request.session['date1'],
+                     "date2": request.session['date2']})
+
+                if 'day' in request.session and 'date_between' in request.session:
+                    dateform2 = DateForm2(
+                        {"day": request.session['math_days'], "month": request.session['math_months'],
+                         "year": request.session['math_years'], "math_type": request.session['math_type'],
+                         "date_between": request.session['date_between']})
+                else:
+                    # Default values if 'day' or 'date_between' is not in session
+                    dateform2 = DateForm2(
+                        {"day": 0, "month": 0, "year": 0, "math_type": "Add", "date_between": datetime.date.today()})
+
+                return render(request, 'datetime.html',
+                              {'dateform': dateform, 'dateform2': dateform2, 'date_dif_months': date_dif_months,
+                               'date_dif_days': date_dif_days,
+                               'date_dif_years': date_dif_years})
+
+
+    # DEFAULT
+    else:
+        if 'date1' in request.session and 'date2' in request.session:
+            dateform = DateForm(
+                {"date_between": datetime.date.today(), "date1": request.session['date1'],
+                 "date2": request.session['date2']})
+        else:
+            dateform = DateForm(
+                {"date_between": datetime.date.today(), "date1": datetime.date.today(),
+                 "date2": datetime.date.today() - datetime.timedelta(days=364)})
+
+        if 'day' in request.session and 'date_between' in request.session:
+            dateform2 = DateForm2(
+                {"day": request.session['math_days'], "month": request.session['math_months'],
+                 "year": request.session['math_years'], "math_type": request.session['math_type'],
+                 "date_between": request.session['date_between']})
+        else:
+            dateform2 = DateForm2(
+                {"day": 0, "month": 0, "year": 0, "math_type": "Add", "date_between": datetime.date.today()})
+
+    return render(request, 'datetime.html', {'dateform': dateform, 'dateform2': dateform2})
 
 
 def line(request):
@@ -318,90 +407,99 @@ def inflation(request):
         '01', '02', '03', '04', '05', '06',
         '07', '08', '09', '10', '11', '12'
     ]
-    if not Inflation.objects.filter(year=year_math.year, month_code="M" + str(month_dict[today.month - 3])).exists():
-        try:
-            headers = {'Content-type': 'application/json'}
-            # data = json.dumps({"seriesid": ['CUUR0000SA0'], "startyear": str(2022), "endyear": str(2023)})
-            data = json.dumps(
-                {"seriesid": ['CUUR0000SA0'], "startyear": str(today.year - 9), "endyear": str(today.year)})
-            p = requests.post('https://api.bls.gov/publicAPI/v1/timeseries/data/', data=data, headers=headers)
-            json_data = json.loads(p.text)
-            print(json_data)
+    # If Inflation API data from current month minus three then pull in API data
 
-            if 'series' in json_data.get('Results', {}):
-                for series in json_data['Results']['series']:
-                    for item in series['data']:
-                        year = item['year']
-                        month_code = item['period']
-                        month = item['periodName']
-                        value = item['value']
-                        inflation_data = Inflation(year=year, month_code=month_code, month=month, inflation_rate=value)
+    if not Inflation.objects.filter(year=year_math.year, month_code="M" + str(month_dict[today.month - 2])).exists():
+        print("shit")
+        headers = {'Content-type': 'application/json'}
 
-                        if not Inflation.objects.filter(year=year, month_code=month_code).exists():
-                            inflation_data.save()
-        except:
-            pass
+        data = json.dumps({"seriesid": ['CUUR0000SA0'], "startyear": str(today.year - 1), "endyear": str(today.year)})
 
-            month_dict = [
-                '01', '02', '03', '04', '05', '06',
-                '07', '08', '09', '10', '11', '12'
-            ]
+        p = requests.post('https://api.bls.gov/publicAPI/v1/timeseries/data/', data=data, headers=headers)
+        json_data = json.loads(p.text)
+        # print(json_data)
 
-            year = today.year
+        # pull-in and decompose API data. match API field to Inflation model. Only save record if the MM/YYYY does not exist in DB
+        if 'series' in json_data.get('Results', {}):
+            for series in json_data['Results']['series']:
+                for item in series['data']:
+                    year = item['year']
+                    month_code = item['period']
+                    month = item['periodName']
+                    value = item['value']
+                    inflation_data = Inflation(year=year, month_code=month_code, month=month, inflation_rate=value)
+                    # print(item)
+                    if not Inflation.objects.filter(year=year, month_code=month_code).exists():
+                        inflation_data.save()
+                # except:
+                #    pass
 
-            counter1 = 0
-            for total_years in Inflation.objects.all():
-                for month_code in month_dict:
-                    try:
-                        object1 = Inflation.objects.get(year=str(year - counter1), month_code='M' + str(month_code))
-                        object2 = Inflation.objects.get(year=str(1913), month_code='M01')
+                month_dict = [
+                    '01', '02', '03', '04', '05', '06',
+                    '07', '08', '09', '10', '11', '12'
+                ]
 
-                        percent_change_all = (((float(object1.inflation_rate) - float(object2.inflation_rate)) / float(
-                            object2.inflation_rate)) * 100)
+                year = today.year
 
-                        object1.percent_change_all = percent_change_all
-                        object1.save()
-                    except:
-                        pass
+                counter1 = 0
+                for total_years in Inflation.objects.all():
+                    for month_code in month_dict:
+                        try:
 
-                counter1 += 1
+                            object1 = Inflation.objects.get(year=str(year - counter1), month_code='M' + str(month_code))
+                            object2 = Inflation.objects.get(year=str(1913), month_code='M01')
 
-            counter = 0
-            for total_years in Inflation.objects.filter(year__range=(1914, year)).values('year').distinct():
-                for month_code in month_dict:
-                    try:
-                        object1 = Inflation.objects.get(year=str(year - counter), month_code='M' + str(month_code))
-                        object2 = Inflation.objects.get(year=str(year - (counter + 1)),
-                                                        month_code='M' + str(month_code))
+                            percent_change_all = (
+                                    ((float(object1.inflation_rate) - float(object2.inflation_rate)) / float(
+                                        object2.inflation_rate)) * 100)
+                            # print(percent_change_all)
 
-                        percent_change = (((float(object1.inflation_rate) - float(object2.inflation_rate)) / float(
-                            object2.inflation_rate)) * 100)
+                            object1.percent_change_all = percent_change_all
+                            # print(object1)
+                            object1.save()
+                        except:
+                            pass
 
-                        object1.percent_change = percent_change
-                        object1.save()
-                    except:
-                        pass
+                    counter1 += 1
 
-                counter += 1
+                counter = 0
+                for total_years in Inflation.objects.filter(year__range=(1914, year)).values('year').distinct():
+                    for month_code in month_dict:
+                        try:
+                            object1 = Inflation.objects.get(year=str(year - counter), month_code='M' + str(month_code))
+                            object2 = Inflation.objects.get(year=str(year - (counter + 1)),
+                                                            month_code='M' + str(month_code))
 
-            for target_year in range(1913, int(year) + 1):
-                for count in range(len(month_dict)):
-                    current_month_code = "M" + str(month_dict[count])
-                    previous_month_code = "M" + str(month_dict[count - 1]) if count > 0 else "M12"  # Handle December
-                    # trash code and digital duct tape
-                    try:
-                        object1 = Inflation.objects.get(year=str(target_year), month_code=current_month_code)
-                        object2 = Inflation.objects.get(year=str(target_year - 1 if count == 0 else target_year),
-                                                        month_code=previous_month_code)
+                            percent_change = (((float(object1.inflation_rate) - float(object2.inflation_rate)) / float(
+                                object2.inflation_rate)) * 100)
 
-                        percent_change_mom = ((float(object1.inflation_rate) - float(object2.inflation_rate))
-                                              / float(object2.inflation_rate)) * 100
+                            object1.percent_change = percent_change
+                            # print(object1)
+                            object1.save()
+                        except:
+                            pass
 
-                        object1.percent_change_mom = percent_change_mom
-                        object1.save()
+                    counter += 1
 
-                    except:
-                        pass
+                for target_year in range(1913, int(year) + 1):
+                    for count in range(len(month_dict)):
+                        current_month_code = "M" + str(month_dict[count])
+                        previous_month_code = "M" + str(
+                            month_dict[count - 1]) if count > 0 else "M12"  # Handle December
+                        # trash code and digital duct tape
+                        try:
+                            object1 = Inflation.objects.get(year=str(target_year), month_code=current_month_code)
+                            object2 = Inflation.objects.get(year=str(target_year - 1 if count == 0 else target_year),
+                                                            month_code=previous_month_code)
+
+                            percent_change_mom = ((float(object1.inflation_rate) - float(object2.inflation_rate))
+                                                  / float(object2.inflation_rate)) * 100
+
+                            object1.percent_change_mom = percent_change_mom
+                            object1.save()
+
+                        except:
+                            pass
         inflationform = InflationForm()
         return render(request, "inflation.html", {'data': data, 'inflationform': inflationform})
 
@@ -435,8 +533,18 @@ def inflation(request):
             end_muney = (Decimal(inflation_rate_end.inflation_rate) / Decimal(
                 inflation_rate_start.inflation_rate)) * Decimal(start_money)
 
+            # Paginator
+            paginator = Paginator(data, 25)
+            page_number = request.GET.get("page")
+            data = paginator.get_page(page_number)
+
             return render(request, "inflation.html",
                           {'data': data, 'inflationform': inflationform, 'end_muney': end_muney})
+
+    # Paginator
+    paginator = Paginator(data, 25)
+    page_number = request.GET.get("page")
+    data = paginator.get_page(page_number)
 
     inflationform = InflationForm()
     return render(request, "inflation.html",

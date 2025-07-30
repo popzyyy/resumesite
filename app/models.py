@@ -8,23 +8,23 @@ from django.db import models
 from django.utils import timezone
 
 
-
-
-
-
 def refresh(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
+class Death(models.Model):
+    id = models.BigAutoField(primary_key=True, editable=False)
+    ipaddress = models.TextField(max_length=150, null=True, blank=True)
+    death_time = models.TextField(null=True, blank=True)
 
 class Visitor(models.Model):
     id = models.BigAutoField(primary_key=True, editable=False)
     ipaddress = models.TextField(max_length=150, null=True, blank=True)
     city = models.TextField(max_length=150, null=True, blank=True)
     state = models.TextField(max_length=150, null=True, blank=True)
-    country = models.TextField(max_length=150, null=True,  blank=True)
+    country = models.TextField(max_length=150, null=True, blank=True)
     latitude = models.DecimalField(max_digits=15, decimal_places=12, null=True, blank=True)
-    longitude = models.DecimalField(max_digits=15, decimal_places=12, null=True,  blank=True)
-    zipcode = models.IntegerField(null= True, blank=True)
+    longitude = models.DecimalField(max_digits=15, decimal_places=12, null=True, blank=True)
+    zipcode = models.IntegerField(null=True, blank=True)
     when_visited = models.DateTimeField(default=timezone.now)
 
 
@@ -54,13 +54,15 @@ class Inflation(models.Model):
     year = models.CharField(blank=True, null=True, max_length=4)
     month_code = models.CharField(blank=True, null=True, max_length=4)
     month = models.CharField(blank=True, null=True, max_length=12)
-    inflation_rate = models.DecimalField(blank=True, null=True, decimal_places=15,max_digits=25)
-    percent_change = models.DecimalField(blank=True, null=True, decimal_places=15,max_digits=25) # percent change in january from previous january
-    percent_change_mom = models.DecimalField(blank=True, null=True, decimal_places=15,max_digits=25)
-    percent_change_all = models.DecimalField(blank=True, null=True, decimal_places=15,max_digits=25)
+    inflation_rate = models.DecimalField(blank=True, null=True, decimal_places=15, max_digits=25)
+    percent_change = models.DecimalField(blank=True, null=True, decimal_places=15,
+                                         max_digits=25)  # percent change in january from previous january
+    percent_change_mom = models.DecimalField(blank=True, null=True, decimal_places=15, max_digits=25)
+    percent_change_all = models.DecimalField(blank=True, null=True, decimal_places=15, max_digits=25)
 
-
-
+    #def save(self, *args, **kwargs):
+    #    self.total_price = self.price + (self.price * self.tax_rate)
+    #    super().save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = "Inflation"
@@ -68,6 +70,3 @@ class Inflation(models.Model):
     def __str__(self):
         # Return a string representation of the object
         return f"{self.year},{self.month},{self.inflation_rate}"
-
-
-
