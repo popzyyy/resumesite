@@ -14,7 +14,6 @@ from ipware import get_client_ip
 from django.core.paginator import Paginator
 import time
 from datetime import datetime as dt, timedelta
-from tzlocal import get_localzone
 
 
 def refresh(request):
