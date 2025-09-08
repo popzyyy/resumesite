@@ -134,7 +134,7 @@ def grim_reaper(request):
         object = Death.objects.get(ipaddress=ip)
         time_db = object.death_time
         return render(request, 'grim.html',
-                      {'ip': ip,'time_db':time_db})
+                      {'ip': ip, 'time_db': time_db})
 
     if not Death.objects.filter(ipaddress=ip, death_time__isnull=False).exists():
         print("NOT EXISTS. NO FORM")
@@ -149,19 +149,12 @@ def grim_reaper(request):
             random_datetime = min_time + timedelta(seconds=random_time)
             time_db = random_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
-
-
             object = Death(ipaddress=ip, death_time=time_db)
             object.save()
 
             time_db = object.death_time
             return render(request, 'grim.html',
                           {'ip': ip, 'time_db': time_db})
-
-
-
-
-
 
     return render(request, 'grim.html',
                   {'ip': ip})
@@ -407,9 +400,8 @@ def inflation(request):
         '01', '02', '03', '04', '05', '06',
         '07', '08', '09', '10', '11', '12'
     ]
-    # If Inflation API data from current month minus three then pull in API data
-
-    if not Inflation.objects.filter(year=year_math.year, month_code="M" + str(month_dict[today.month - 2])).exists():
+    # If Inflation API data not present for current month minus 2 months then pull in API data
+    if not Inflation.objects.filter(year=year_math.year, month_code="M" + str(month_dict[today.month - 3])).exists():
         print("shit")
         headers = {'Content-type': 'application/json'}
 
@@ -613,3 +605,26 @@ def getipaddress(request):
         return ip
     except:
         pass
+
+
+def conversions(request):
+    getipaddress(request)
+    if request.method == "POST":
+        distanceform = DistanceForm(request.POST)
+        print(distanceform.errors)
+        if distanceform.is_valid():
+            distance_from = distanceform.cleaned_data['distance_from']
+            unit_from = distanceform.cleaned_data['unit_from']
+            unit_to = distanceform.cleaned_data['unit_to']
+            distance_to = distance_from + 1
+            print(distance_from, unit_from, distance_to, unit_to)
+
+            return render(request, 'conversions.html', {'distanceform': distanceform,
+                                                        'distance_from': distance_from,
+                                                        'distance_to': distance_to})
+
+
+    else:
+        distanceform = DistanceForm()
+
+    return render(request, 'conversions.html', {'distanceform': distanceform})

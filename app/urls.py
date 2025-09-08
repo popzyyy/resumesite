@@ -20,6 +20,7 @@ urlpatterns = [
     path('between_dates/', views.between_dates, name='between_dates'),
     path('ipaddress/', views.ipaddress, name='ipaddress'),
     path('memento_mori/', views.grim_reaper, name='grim'),
+    path('conversions/', views.conversions, name='conversions'),
 ]
 
 if settings.DEBUG:

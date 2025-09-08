@@ -6,6 +6,7 @@ from django.forms import ModelForm, Textarea, TextInput, formset_factory, modelf
 from app.models import *
 from django.db.models import Max
 
+
 class GPAForm(forms.ModelForm):
     class Meta:
         model = GPA
@@ -62,9 +63,12 @@ class DateForm2(forms.Form):
     date_between = forms.DateField(label='Start Date', initial=datetime.datetime.now(),
                                    widget=forms.SelectDateWidget(years=range(1, 2250), attrs={'style': 'width: 10em;'}))
 
-    day = forms.IntegerField(label='Days', min_value=0, max_value=99999, widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
-    month = forms.IntegerField(label='Months', min_value=0, max_value=9999, widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
-    year = forms.IntegerField(label='Years', min_value=0, max_value=9000, widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
+    day = forms.IntegerField(label='Days', min_value=0, max_value=99999,
+                             widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
+    month = forms.IntegerField(label='Months', min_value=0, max_value=9999,
+                               widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
+    year = forms.IntegerField(label='Years', min_value=0, max_value=9000,
+                              widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
 
 
 class TimeForm(forms.Form):
@@ -75,3 +79,74 @@ class TimeForm(forms.Form):
 class DeathForm(forms.Form):
     death_time = forms.DateTimeField(widget=forms.SplitDateTimeWidget(attrs={'style': 'width: 10em;'}))
 
+
+class DistanceForm(forms.Form):
+    ###### MEASUREMENTS
+    distance_to = forms.IntegerField(min_value=-99999, max_value=99999, initial="", disabled=True, required=False,
+                                     widget=(
+                                         forms.HiddenInput()
+                                     ))
+
+    distance_from = forms.IntegerField(min_value=-99999, max_value=99999,
+                                       widget=forms.TextInput(attrs={'style': 'width: 8em;'}))
+    # imperial
+    DISTANCE_CHOICES = (
+        ("feet", "Feet"),
+        ("inch", "Inch"),
+        ("yard", "Yard"),
+        ("mile", "Mile"),
+
+        # metric
+        ("terameter", "Terameter"),
+        ("gigameter", "Gigameter"),
+        ("megameter", "Megameter"),
+        ("kilometer", "Kilometer"),
+        ("hectometer", "Hectometer"),
+        ("decameter", "Decameter"),
+        ("meter", "Meter"),
+        ("decimeter", "Decimeter"),
+        ("centimeter", "Centimeter"),
+        ("millimeter", "Millimeter"),
+        ("micrometer", "Micrometer"),
+        ("nanometer", "Nanometer"),
+        ("picometer", "Picometer"),
+        ("femtometer", "Femtometer"),
+        ("attometer", "Attometer"),
+    )
+
+    unit_from = forms.ChoiceField(
+        choices=DISTANCE_CHOICES,
+        widget=forms.Select(attrs={'style': 'width: 10em;'})
+    )
+    unit_to = forms.ChoiceField(
+        choices=DISTANCE_CHOICES,
+        widget=forms.Select(attrs={'style': 'width: 10em;'})
+    )
+
+class ConversionsForm(forms.Form):
+    ##### TEMPERATURE
+
+    farenheit = forms.TextInput()
+    celcius = forms.TextInput()
+    kelvin = forms.TextInput()
+    rankine = forms.TextInput()
+
+    #### Volume
+
+    # imperial
+    teaspoon = forms.TextInput()
+    tablespoon = forms.TextInput()
+    fluid_ounce = forms.TextInput()
+    cup = forms.TextInput()
+    pint = forms.TextInput()
+    quart = forms.TextInput()
+    gallon = forms.TextInput()
+    barrel = forms.TextInput()
+    # metric (cringe)
+    milliliter = forms.TextInput()
+    centiliter = forms.TextInput()
+    deciliter = forms.TextInput()
+    liter = forms.TextInput()
+    decaliter = forms.TextInput()
+    hectoliter = forms.TextInput()
+    kiloliter = forms.TextInput()
