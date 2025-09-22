@@ -118,29 +118,35 @@
             color: #646363;
 
 
-
         }
 
 
     </style>
 
     <div id="banner-wrapper">
-            <div id="banner" class="box container">
-                <div class="row">
-                    <section class="box feature">
-                        <section class="tabs">
+        <div id="banner" class="box container">
+            <div class="row">
+                <section class="box feature">
+                    <section class="tabs">
 
-                            <div class="tablist" role="tablist" aria-label="Pop Menu">
-                                <button class="tab" type="button" role="tab" aria-selected="true"
-                                        aria-controls="panel-distance" id="tab-distance">Distance
-                                </button>
-                                <button class="tab" type="button" role="tab" aria-selected="false"
-                                        aria-controls="panel-temp" id="tab-temp">Temperature
-                                </button>
-                                <button class="tab" type="button" role="tab" aria-selected="false"
-                                        aria-controls="panel-volume" id="tab-volume">Volume
-                                </button>
-                            </div>
+
+                        <div class="tablist" role="tablist" aria-label="Pop Menu">
+                            <button class="tab" type="button" role="tab"
+                                    aria-controls="panel-distance" id="tab-distance"
+                                    onclick="window.location.href='{% url 'convert_distance' %}'">
+                                Distance
+                            </button>
+                            <button class="tab" type="button" role="tab"
+                                    aria-controls="panel-temperature" id="tab-temperature"
+                                    onclick="window.location.href='{% url 'convert_temperature' %}'">
+                                Temperature
+                            </button>
+                            <button class="tab" type="button" role="tab"
+                                    aria-controls="panel-volume" id="tab-volume"
+                                    onclick="window.location.href='{% url 'convert_volume' %}'">
+                                Volume
+                            </button>
+                        </div>
 
                         <div id="panel-distance" class="panel" role="tabpanel" tabindex="0"
                              aria-labelledby="tab-distance">
@@ -239,9 +245,7 @@
 
         const hashMap = {
             '#home': 'tab-home',
-            '#products': 'tab-products',
-            '#about': 'tab-about',
-            '#settings': 'tab-settings'
+
         };
 
     </script>

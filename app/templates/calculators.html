@@ -2,147 +2,165 @@
 {% load static %}
 {% block content %}
 
-			<!-- Features -->
-				<div id="features-wrapper">
-					<div class="container">
-						<div class="row">
-							<div class="col-4 col-12-medium">
+    <!-- Features -->
+    <div id="features-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-4 col-12-medium">
 
-								<!-- Box -->
-									<section class="box feature">
-										<a href="{% url 'gpacalc' %}" class="image featured"><img src="{% static 'images/bushlean.png' %}" alt="" /></a>
-										<div class="inner">
-											<header>
-												<h2>GPA Calculator</h2>
-												<p></p>
-											</header>
-											<p>Bad grade in a class? See how it will affect your GPA or calculate your entire cumulative GPA! Uses a 4.0 scale. 5.0 scale and more features coming soon.</p>
-										</div>
-									</section>
+                    <!-- Box -->
+                    <section class="box feature">
+                        <a href="{% url 'inflation' %}" class="image featured"><img
+                                src="{% static 'images/notstonks.png' %}" alt=""/></a>
+                        <div class="inner">
+                            <header>
+                                <h2>Inflation Calculator</h2>
+                            </header>
+                            <p>Take a peek at how much centralized banking using fiat currency has eroded your ability
+                                to live!!!</p>
+                            <br>
+                            <p>Currently only in United States Dollars. Data provided by the Bureau of Labor Statistics
+                                API and is from 1913 to Present</p>
 
-							</div>
-							<div class="col-4 col-12-medium">
+                        </div>
+                    </section>
 
-								<!-- Box -->
-									<section class="box feature">
-										<a href= "{% url 'inflation' %}" class="image featured"><img src="{% static 'images/notstonks.png' %}" alt="" /></a>
-										<div class="inner">
-											<header>
-												<h2>Inflation Calculator</h2>
-											</header>
-											<p>Take a peek at how much centralized banking using fiat currency has eroded your ability to live!!!</p>
-                                            <br>
-                                            <p>Currently only in United States Dollars. Data provided by the Bureau of Labor Statistics API and is from 1913 to Present</p>
+                </div>
 
-										</div>
-									</section>
+                <div class="col-4 col-12-medium">
 
-							</div>
-                            <div class="col-4 col-12-medium">
+                    <!-- Box -->
+                    <section class="box feature">
+                        <a href="{% url 'date' %}" class="image featured"><img
+                                style="max-width: 100%; max-height: 500px;" src="{% static 'images/borger.JPG' %}"
+                                alt=""/></a>
+                        <div class="inner">
+                            <header>
+                                <h2>Calculate Between Dates</h2>
 
-								<!-- Box -->
-									<section class="box feature">
-										<a href= "{% url 'time' %}" class="image featured"><img src="{% static 'images/time.png' %}" alt="" /></a>
-										<div class="inner">
-											<header>
-												<h2>Time Calculator</h2>
+                            </header>
+                            <p>Need to see what date you have to pay your bills before they go to collections? Do math
+                                between dates or +/- to dates. </p>
+                        </div>
+                    </section>
 
-											</header>
-											<p>Want to quantify time? You can't predict the future but you sure can calculate it. Calculate difference between all units of time down to the millisecond.</p>
-										</div>
-									</section>
+                </div>
 
-							</div>
-                           <div class="col-4 col-12-medium">
+                <div class="col-4 col-12-medium">
+                    <section class="box feature">
+                        <a href="{% url 'between_dates' %}" class="image featured"><img
+                                src="{% static 'images/IMG_0135.JPG' %}" alt=""/></a>
+                        <div class="inner">
+                            <header>
+                                <h2>Add or Subtract Dates</h2>
+                            </header>
+                            <p>Need to see how many years you have to work before you can finally start enjoying your
+                                life? I got you. </p>
+                        </div>
+                    </section>
 
-								<!-- Box -->
-									<section class="box feature">
-										<a href= "{% url 'date' %}" class="image featured"><img style="max-width: 100%; max-height: 500px;" src="{% static 'images/borger.JPG' %}" alt="" /></a>
-										<div class="inner">
-											<header>
-												<h2>Calculate Between Dates</h2>
+                </div>
 
-											</header>
-											<p>Need to see what date you have to pay your bills before they go to collections? Do math between dates or +/- to dates. </p>
-										</div>
-									</section>
+                <div class="col-4 col-12-medium">
 
-							</div>
-                            <div class="col-4 col-12-medium">
-									<section class="box feature">
-										<a href="{% url 'between_dates' %}" class="image featured"><img src="{% static 'images/date_between.jpg' %}" alt="" /></a>
-										<div class="inner">
-											<header>
-												<h2>Add or Subtract Dates</h2>
-											</header>
-											<p>Need to see how many years you have to work before you can finally start enjoying your life? I got you. </p>
-										</div>
-									</section>
+                    <!-- Box -->
+                    <section class="box feature">
+                        <a href="{% url 'time' %}" class="image featured"><img src="{% static 'images/time.png' %}"
+                                                                               alt=""/></a>
+                        <div class="inner">
+                            <header>
+                                <h2>Time Calculator</h2>
 
-							</div>
+                            </header>
+                            <p>Want to quantify time? You can't predict the future but you sure can calculate it.
+                                Calculate difference between all units of time down to the millisecond.</p>
+                        </div>
+                    </section>
 
-                            <div class="col-4 col-12-medium">
-									<section class="box feature">
-										<a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
-										<div class="inner">
-											<header>
-												<h2>Put something here</h2>
-												<p>Maybe here as well I think</p>
-											</header>
-											<p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet bibendum tristique fringilla.</p>
-										</div>
-									</section>
+                </div>
 
-							</div>
-                             <!--
-                            <div class="col-4 col-12-medium">
+                <div class="col-4 col-12-medium">
 
+                    <!-- Box -->
+                    <section class="box feature">
+                        <a href="{% url 'gpacalc' %}" class="image featured"><img
+                                src="{% static 'images/bushlean.png' %}" alt=""/></a>
+                        <div class="inner">
+                            <header>
+                                <h2>GPA Calculator</h2>
+                                <p></p>
+                            </header>
+                            <p>Bad grade in a class? See how it will affect your GPA or calculate your entire cumulative
+                                GPA! Uses a 4.0 scale. 5.0 scale and more features coming soon.</p>
+                        </div>
+                    </section>
 
-									<section class="box feature">
-										<a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
-										<div class="inner">
-											<header>
-												<h2>Put something here</h2>
-												<p>Maybe here as well I think</p>
-											</header>
-											<p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet bibendum tristique fringilla.</p>
-										</div>
-									</section>
-
-							</div>
-                            <div class="col-4 col-12-medium">
+                </div>
 
 
-									<section class="box feature">
-										<a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
-										<div class="inner">
-											<header>
-												<h2>Put something here</h2>
-												<p>Maybe here as well I think</p>
-											</header>
-											<p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet bibendum tristique fringilla.</p>
-										</div>
-									</section>
+                <!--
+                                           <div class="col-4 col-12-medium">
+                                                   <section class="box feature">
+                                                       <a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
+                                                       <div class="inner">
+                                                           <header>
+                                                               <h2>Put something here</h2>
+                                                               <p>Maybe here as well I think</p>
+                                                           </header>
+                                                           <p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet bibendum tristique fringilla.</p>
+                                                       </div>
+                                                   </section>
 
-							</div>
-							<div class="col-4 col-12-medium">
+                                           </div>
+
+                                           <div class="col-4 col-12-medium">
 
 
-									<section class="box feature">
-										<a href="#" class="image featured"><img src="images/pic03.jpg" alt="" /></a>
-										<div class="inner">
-											<header>
-												<h2>Oh, and finally ...</h2>
-												<p>Here's another intriguing subtitle</p>
-											</header>
-											<p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet bibendum tristique fringilla.</p>
-										</div>
-									</section>
--->
-							</div>
-						</div>
-					</div>
-				</div>
+                                                   <section class="box feature">
+                                                       <a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
+                                                       <div class="inner">
+                                                           <header>
+                                                               <h2>Put something here</h2>
+                                                               <p>Maybe here as well I think</p>
+                                                           </header>
+                                                           <p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet bibendum tristique fringilla.</p>
+                                                       </div>
+                                                   </section>
+
+                                           </div>
+                                           <div class="col-4 col-12-medium">
+
+
+                                                   <section class="box feature">
+                                                       <a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
+                                                       <div class="inner">
+                                                           <header>
+                                                               <h2>Put something here</h2>
+                                                               <p>Maybe here as well I think</p>
+                                                           </header>
+                                                           <p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet bibendum tristique fringilla.</p>
+                                                       </div>
+                                                   </section>
+
+                                           </div>
+                                           <div class="col-4 col-12-medium">
+
+
+                                                   <section class="box feature">
+                                                       <a href="#" class="image featured"><img src="images/pic03.jpg" alt="" /></a>
+                                                       <div class="inner">
+                                                           <header>
+                                                               <h2>Oh, and finally ...</h2>
+                                                               <p>Here's another intriguing subtitle</p>
+                                                           </header>
+                                                           <p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet bibendum tristique fringilla.</p>
+                                                       </div>
+                                                   </section>
+               -->
+            </div>
+        </div>
+    </div>
+    </div>
 
 
 

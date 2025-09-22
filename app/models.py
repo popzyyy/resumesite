@@ -27,27 +27,7 @@ class Visitor(models.Model):
     zipcode = models.IntegerField(null=True, blank=True)
     when_visited = models.DateTimeField(default=timezone.now)
 
-class Distances(models.Model):
-    id = models.BigAutoField(primary_key=True, editable=False)
 
-'''
-    ("terameter", "Terameter"),
-        ("gigameter", "Gigameter"),
-        ("megameter", "Megameter"),
-        ("kilometer", "Kilometer"),
-        ("hectometer", "Hectometer"),
-        ("decameter", "Decameter"),
-        ("meter", "Meter"),
-        ("decimeter", "Decimeter"),
-        ("centimeter", "Centimeter"),
-        ("millimeter", "Millimeter"),
-        ("micrometer", "Micrometer"),
-        ("nanometer", "Nanometer"),
-        ("picometer", "Picometer"),
-        ("femtometer", "Femtometer"),
-        ("attometer", "Attometer"),
-    )
-'''
 class GPA(models.Model):
     id = models.BigAutoField(primary_key=True, editable=False)
 

@@ -14,6 +14,8 @@ from ipware import get_client_ip
 from django.core.paginator import Paginator
 import time
 from datetime import datetime as dt, timedelta
+from app.conversions import *
+from decimal import Decimal, ROUND_HALF_UP
 
 
 def refresh(request):
@@ -235,7 +237,7 @@ def between_dates(request):
                     date_test = datetime.date(year=orig_years, month=orig_months, day=orig_days) + relativedelta(
                         days=math_days, months=math_months, years=math_years)
                     if not (min_valid_date <= date_test <= max_valid_date):
-                        dateform2.add_error(math_years, "Please select a valid date range.")
+                        return dateform2.add_error('year', "Please select a valid date range.")
 
                     new_date = date_test.strftime('%B %d, %Y')
 
@@ -243,7 +245,8 @@ def between_dates(request):
                     date_test = datetime.date(year=orig_years, month=orig_months, day=orig_days) - relativedelta(
                         days=math_days, months=math_months, years=math_years)
                     if not (min_valid_date <= date_test <= max_valid_date):
-                        dateform2.add_error(math_years, "Please select a valid date range.")
+                        return dateform2.add_error('year', "Please select a valid date range.")
+
                     new_date = date_test.strftime('%B %d, %Y')
 
                 if 'date1' in request.session and 'date2' in request.session:
@@ -606,24 +609,100 @@ def getipaddress(request):
         pass
 
 
-def conversions(request):
+def convert_distance(request):
     getipaddress(request)
     if request.method == "POST":
         distanceform = DistanceForm(request.POST)
-        print(distanceform.errors)
+
         if distanceform.is_valid():
+
             distance_from = distanceform.cleaned_data['distance_from']
             unit_from = distanceform.cleaned_data['unit_from']
             unit_to = distanceform.cleaned_data['unit_to']
-            distance_to = distance_from + 1
-            print(distance_from, unit_from, distance_to, unit_to)
+            print(distance_from, unit_to, unit_from)
 
-            return render(request, 'conversions.html', {'distanceform': distanceform,
-                                                        'distance_from': distance_from,
-                                                        'distance_to': distance_to})
+            if unit_from == "freedom_unit" or unit_to == "freedom_unit":
+                distance_from, distance_to, unit_from, unit_to = "1776", "1776", "freedom_unit", "freedom_unit"
 
+                distanceform = DistanceForm(initial={
+                    "distance_from": distance_from,
+                    "distance_to": distance_to,
+                    "unit_from": unit_from,
+                    "unit_to": unit_to,
+                })
+
+                return render(request, 'convert_distance.html', {'distanceform': distanceform,
+                                                                 'distance_from': distance_from,
+                                                                 'distance_to': distance_to,
+
+                                                                 })
+
+            distance_to = convert_distance_bruh(distance_from, unit_from, unit_to)
+            distance_to = Decimal(distance_to).normalize()
+
+            return render(request, 'convert_distance.html', {'distanceform': distanceform,
+                                                             'distance_from': distance_from,
+                                                             'distance_to': distance_to,
+
+                                                             })
 
     else:
         distanceform = DistanceForm()
 
-    return render(request, 'conversions.html', {'distanceform': distanceform})
+    return render(request, 'convert_distance.html', {'distanceform': distanceform})
+
+
+def convert_temperature(request):
+    getipaddress(request)
+
+    if request.method == "POST":
+
+        temperatureform = TemperatureForm(request.POST)
+
+        if temperatureform.is_valid():
+            temperature_from = temperatureform.cleaned_data['temperature_from']
+            unit_from = temperatureform.cleaned_data['unit_from']
+            unit_to = temperatureform.cleaned_data['unit_to']
+            print(temperature_from, unit_from, unit_to)
+
+            temperature_to = convert_temperature_bruh(temperature_from, unit_from, unit_to)
+            temperature_to = Decimal(temperature_to).normalize()
+            print(temperature_to)
+
+            return render(request, 'convert_temperature.html', {'temperatureform': temperatureform,
+                                                                'temperature_from': temperature_from,
+                                                                'temperature_to': temperature_to,
+                                                                'temperatureform': temperatureform,
+                                                                })
+
+    else:
+        temperatureform = TemperatureForm()
+
+    return render(request, 'convert_temperature.html', {'temperatureform': temperatureform})
+
+
+def convert_volume(request):
+    getipaddress(request)
+
+    if request.method == "POST":
+        volumeform = VolumeForm(request.POST)
+
+        print(volumeform.errors)
+
+        if volumeform.is_valid():
+            volume_from = volumeform.cleaned_data['volume_from']
+            unit_from = volumeform.cleaned_data['unit_from']
+            unit_to = volumeform.cleaned_data['unit_to']
+
+
+            volume_to = convert_volume_bruh(volume_from, unit_from, unit_to)
+
+            return render(request, 'convert_volume.html', {'volumeform': volumeform,
+                                                           'volume_from': volume_from,
+                                                           'volume_to': volume_to,
+                                                           })
+
+    else:
+        volumeform = VolumeForm()
+
+    return render(request, 'convert_volume.html', {'volumeform': volumeform})

@@ -61,13 +61,13 @@ class DateForm2(forms.Form):
 
     math_type = forms.ChoiceField(choices=math_choices)
     date_between = forms.DateField(label='Start Date', initial=datetime.datetime.now(),
-                                   widget=forms.SelectDateWidget(years=range(1, 2250), attrs={'style': 'width: 10em;'}))
+                                   widget=forms.SelectDateWidget(years=range(600, 2250), attrs={'style': 'width: 10em;'}))
 
-    day = forms.IntegerField(label='Days', min_value=0, max_value=99999,
+    day = forms.IntegerField(label='Days', min_value=0, max_value=2500,
                              widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
-    month = forms.IntegerField(label='Months', min_value=0, max_value=9999,
+    month = forms.IntegerField(label='Months', min_value=0, max_value=2500,
                                widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
-    year = forms.IntegerField(label='Years', min_value=0, max_value=9000,
+    year = forms.IntegerField(label='Years', min_value=0, max_value=500,
                               widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
 
 
@@ -82,13 +82,29 @@ class DeathForm(forms.Form):
 
 class DistanceForm(forms.Form):
     ###### MEASUREMENTS
-    distance_to = forms.IntegerField(min_value=-99999, max_value=99999, initial="", disabled=True, required=False,
-                                     widget=(
-                                         forms.HiddenInput()
-                                     ))
+    distance_to = forms.DecimalField(
+        min_value=-99999,
+        max_value=99999,
+        max_digits=100000,
+        decimal_places=9,
+        initial="",
+        disabled=True,
+        required=False,
+        widget=(
+            forms.HiddenInput()
+        ))
 
-    distance_from = forms.IntegerField(min_value=-99999, max_value=99999,
-                                       widget=forms.TextInput(attrs={'style': 'width: 8em;'}))
+
+    distance_from = forms.DecimalField(
+        min_value=-99999,
+        max_value=99999,
+        max_digits=100000,
+        decimal_places=9,
+        widget=forms.TextInput(attrs={'style': 'width: 8em;'})
+    )
+
+
+
     # imperial
     DISTANCE_CHOICES = (
         ("feet", "Feet"),
@@ -112,41 +128,109 @@ class DistanceForm(forms.Form):
         ("picometer", "Picometer"),
         ("femtometer", "Femtometer"),
         ("attometer", "Attometer"),
+        ("lightyear", "Lightyear"),
+        ("freedom_unit", "Freedom_Unit"),
     )
 
     unit_from = forms.ChoiceField(
         choices=DISTANCE_CHOICES,
-        widget=forms.Select(attrs={'style': 'width: 10em;'})
+        widget=forms.Select(attrs={'style': 'width: 14em;'})
     )
     unit_to = forms.ChoiceField(
         choices=DISTANCE_CHOICES,
-        widget=forms.Select(attrs={'style': 'width: 10em;'})
+        widget=forms.Select(attrs={'style': 'width: 14em;'})
     )
 
-class ConversionsForm(forms.Form):
+class TemperatureForm(forms.Form):
     ##### TEMPERATURE
+    temperature_to = forms.DecimalField(
+        min_value=-99999,
+        max_value=99999,
+        max_digits=20,
+        decimal_places=12,
+        initial=None,
+        required=False,
+        disabled=True,
+        widget=forms.TextInput(attrs={'style': 'width: 8em;', 'readonly': 'readonly'})
+    )
 
-    farenheit = forms.TextInput()
-    celcius = forms.TextInput()
-    kelvin = forms.TextInput()
-    rankine = forms.TextInput()
 
+    temperature_from = forms.DecimalField(
+        min_value=-99999,
+        max_value=99999,
+        max_digits=20,
+        decimal_places=12,
+        widget=forms.TextInput(attrs={'style': 'width: 8em;'})
+    )
+
+    TEMP_CHOICES = (
+        ("fahrenheit", "Fahrenheit"),
+        ("celsius", "Celsius"),
+        ("kelvin", "Kelvin"),
+        ("rankine", "Rankine"),
+
+    )
+
+    unit_from = forms.ChoiceField(
+        choices=TEMP_CHOICES,
+        widget=forms.Select(attrs={'style': 'width: 14em;'})
+    )
+    unit_to = forms.ChoiceField(
+        choices=TEMP_CHOICES,
+        widget=forms.Select(attrs={'style': 'width: 14em;'})
+    )
+
+
+
+class VolumeForm(forms.Form):
     #### Volume
+    ##### TEMPERATURE
+    volume_to = forms.DecimalField(
+        min_value=-99999,
+        max_value=99999,
+        max_digits=20,
+        decimal_places=12,
+        initial=None,
+        required=False,
+        disabled=True,
+        widget=forms.TextInput(attrs={'style': 'width: 8em;', 'readonly': 'readonly'})
+    )
 
-    # imperial
-    teaspoon = forms.TextInput()
-    tablespoon = forms.TextInput()
-    fluid_ounce = forms.TextInput()
-    cup = forms.TextInput()
-    pint = forms.TextInput()
-    quart = forms.TextInput()
-    gallon = forms.TextInput()
-    barrel = forms.TextInput()
-    # metric (cringe)
-    milliliter = forms.TextInput()
-    centiliter = forms.TextInput()
-    deciliter = forms.TextInput()
-    liter = forms.TextInput()
-    decaliter = forms.TextInput()
-    hectoliter = forms.TextInput()
-    kiloliter = forms.TextInput()
+
+    volume_from = forms.DecimalField(
+        min_value=-99999,
+        max_value=99999,
+        max_digits=20,
+        decimal_places=12,
+        widget=forms.TextInput(attrs={'style': 'width: 8em;'})
+    )
+
+    VOLUME_CHOICES = (
+        # Imperial
+        ("teaspoon", "Teaspoon"),
+        ("tablespoon", "Tablespoon"),
+        ("fluid_ounce", "Fluid Ounce"),
+        ("cup", "Cup"),
+        ("pint", "Pint"),
+        ("quart", "Quart"),
+        ("gallon", "Gallon"),
+        ("barrel", "Barrel"),
+
+        # Metric (CRINGE)
+        ("milliliter", "Milliliter"),
+        ("centiliter", "Centiliter"),
+        ("deciliter", "Deciliter"),
+        ("liter", "Liter"),
+        ("decaliter", "Decaliter"),
+        ("hectoliter", "Hectoliter"),
+        ("kiloliter", "Kiloliter"),
+    )
+
+    unit_from = forms.ChoiceField(
+        choices=VOLUME_CHOICES,
+        widget=forms.Select(attrs={'style': 'width: 14em;'})
+    )
+    unit_to = forms.ChoiceField(
+        choices=VOLUME_CHOICES,
+        widget=forms.Select(attrs={'style': 'width: 14em;'})
+    )

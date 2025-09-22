@@ -1,0 +1,204 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block content %}
+
+    <style>
+        .form-inline {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            flex-wrap: wrap;
+        }
+
+        .form-inline input,
+        .form-inline select {
+            display: inline-block;
+            width: auto !important;
+            max-width: 14rem;
+        }
+
+        body {
+            margin: 0;
+            display: grid;
+            place-items: center;
+            min-height: 125vh
+        }
+
+        .tabs {
+            width: min(1100px, 112vw);
+            border-radius: 18px;
+
+            overflow: hidden
+        }
+
+        .tablist {
+            display: flex;
+            gap: .25rem;
+            background: rgba(255, 255, 255, .04);
+            padding: .4rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .06);
+
+        }
+
+        .tab {
+            appearance: none;
+            background: transparent;
+            color: rgba(0, 0, 0, 0.79);
+            padding: .8rem 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid rgba(143, 143, 143, 0.78);
+        }
+
+        .tab[aria-selected="true"] {
+            outline: 2px solid transparent;
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .06)
+        }
+
+        .tab:focus-visible {
+
+            outline-offset: 2px;
+            border-radius: 12px
+        }
+
+        .panel {
+            display: none;
+            padding: 1.25rem 1.2rem 1.5rem
+        }
+
+        .panel[hidden] {
+            display: none
+        }
+
+        .panel:not([hidden]) {
+            display: block
+        }
+
+        .grid {
+            display: grid;
+            gap: .8rem;
+            grid-template-columns:repeat(auto-fit, minmax(220px, 1fr))
+        }
+
+        .card {
+            background: rgba(152, 152, 152, 0.38);
+            border: 1px solid rgba(255, 255, 255, .06);
+            border-radius: 14px;
+            padding: 1rem
+        }
+
+        a.btn {
+            display: inline-block;
+            margin-top: .6rem;
+            padding: .55rem .8rem;
+            background: rgba(152, 152, 152, 0.38);
+            color: #646363;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700
+        }
+
+        button {
+            display: inline-block;
+            margin-top: .6rem;
+            padding: .55rem .8rem;
+            background: rgba(234, 61, 8, 0.98) !important;
+            color: #646363;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700
+        }
+
+        .bruh {
+            background: rgba(28, 120, 243, 0.98) !important;
+            color: #646363;
+        }
+    </style>
+
+    <div id="banner-wrapper">
+        <div id="banner" class="box container">
+            <div class="row">
+                <section class="box feature">
+                    <section class="tabs">
+
+
+                        <div class="tablist" role="tablist" aria-label="Pop Menu">
+                            <button class="tab" type="button" role="tab"
+                                    aria-controls="panel-distance" id="tab-distance"
+                                    onclick="window.location.href='{% url 'convert_distance' %}'">
+                                Distance
+                            </button>
+                            <button class="tab" type="button" role="tab" aria-selected="true"
+                                    aria-controls="panel-temperature" id="tab-temperature"
+                                    onclick="window.location.href='{% url 'convert_temperature' %}'">
+                                Temperature
+                            </button>
+                            <button class="tab" type="button" role="tab"
+                                    aria-controls="panel-volume" id="tab-volume"
+                                    onclick="window.location.href='{% url 'convert_volume' %}'">
+                                Volume
+                            </button>
+                        </div>
+
+
+                        <div id="panel-temp" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-volume">
+                            <form method="post">{% csrf_token %}
+                                <input type="hidden" value="volume">
+                                <div class="grid">
+                                    <div class="card">
+                                        <h3>Volume From</h3>
+                                        <div class="form-inline">
+                                            {{ volumeform.volume_from.errors }}
+                                            {{ volumeform.volume_from }}
+                                            {{ volumeform.unit_from }}
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <h3>Volume To</h3>
+                                        <div class="form-inline">
+                                            <input type="text" name="volume_to" value="{{ volume_to }}"
+                                                   style="width: 8em;" id="id_volume_to" readonly>
+                                            {{ volumeform.unit_to }}
+                                        </div>
+                                        <div style="display:inline-block;">
+                                            <button class="button bruh" type="submit">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script>
+        const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+        const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+
+        function activateTab(tab) {
+            tabs.forEach(t => t.setAttribute('aria-selected', t === tab ? 'true' : 'false'));
+            panels.forEach(p => {
+                p.hidden = (p.id !== tab.getAttribute('aria-controls'));
+            });
+            const activePanel = document.getElementById(tab.getAttribute('aria-controls'));
+            activePanel.focus({preventScroll: true});
+        }
+
+        tabs.forEach((tab, idx) => {
+            tab.addEventListener('click', () => activateTab(tab));
+
+
+        });
+
+        const hashMap = {
+            '#home': 'tab-home',
+            '#temp': 'tab-temp',
+        };
+
+    </script>
+
+
+{% endblock %}

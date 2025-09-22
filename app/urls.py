@@ -20,7 +20,9 @@ urlpatterns = [
     path('between_dates/', views.between_dates, name='between_dates'),
     path('ipaddress/', views.ipaddress, name='ipaddress'),
     path('memento_mori/', views.grim_reaper, name='grim'),
-    path('conversions/', views.conversions, name='conversions'),
+    path('convert_distance/', views.convert_distance, name='convert_distance'),
+    path('convert_temperature/', views.convert_temperature, name='convert_temperature'),
+    path('convert_volume/', views.convert_volume, name='convert_volume')
 ]
 
 if settings.DEBUG:

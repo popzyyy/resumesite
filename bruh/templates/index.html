@@ -35,15 +35,16 @@
 
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div style="margin-right: 2rem; display: flex; align-items: center;" class="container-fluid bruh">
-        <span style="display: inline-flex; padding-left: 1em;"
+    <div style=" display: flex; align-items: center;" class="container-fluid bruh">
+        <span style="display: inline-flex; padding-left: .3em;"
               title="Steve is also fine">Steven D. Press</span>
     </div>
+<!--
+    <div style="fontcolor:rgb(68, 68, 68);font-family:'Raleway',sans-serif;  display: flex; align-items: center;" class="container-fluid">
 
-    <div style="fontcolor:rgb(68, 68, 68);font-family:'Raleway',sans-serif;  margin-right: 2rem; display: flex; align-items: center;" class="container-fluid bruh">
-        <span style="display: inline-flex;"><a href={% url 'tools_home' %}>Project Site Here</a></span>
+
     </div>
-
+-->
     <button class="navbar-toggler collapsed d-flex d-lg-none flex-column justify-content-around" type="button"
             data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
             aria-label="Toggle navigation">
@@ -99,6 +100,15 @@
                     <a class="nav-link" href="{% url 'contact' %}"><b>Contact</b></a>
                 </a_neon>
             </li>
+            <li class="nav-item">
+                <a_neon>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <a class="nav-link" href="{% url 'tools_home' %}"><b>Secret</b></a>
+                </a_neon>
+            </li>
         </ul>
     </div>
 
@@ -109,7 +119,7 @@
 <footer>
     <div class="wrapper">
         <div class="footer-left">
-            <p>Created by Steven D. Press &nbsp; Press Industries 2025© No Rights Reserved </p>
+            <p>Created by Steven D. Press &nbsp;&nbsp; Press Industries 2025© &nbsp;&nbsp;No Rights Reserved </p>
         </div>
         <div class="footer-right">
             <p class="footer-links"><a href="https://github.com/popzyyy" target="_blank" rel="noopener noreferrer">Github</a>

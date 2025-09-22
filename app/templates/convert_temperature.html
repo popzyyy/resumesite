@@ -109,71 +109,43 @@
             text-decoration: none;
             border-radius: 10px;
             font-weight: 700
-
-
         }
 
         .bruh {
             background: rgba(28, 120, 243, 0.98) !important;
             color: #646363;
-
-
-
         }
-
-
     </style>
 
     <div id="banner-wrapper">
-            <div id="banner" class="box container">
-                <div class="row">
-                    <section class="box feature">
-                        <section class="tabs">
+        <div id="banner" class="box container">
+            <div class="row">
+                <section class="box feature">
+                    <section class="tabs">
 
-                            <div class="tablist" role="tablist" aria-label="Pop Menu">
-                                <button class="tab" type="button" role="tab" aria-selected="true"
-                                        aria-controls="panel-distance" id="tab-distance">Distance
-                                </button>
-                                <button class="tab" type="button" role="tab" aria-selected="false"
-                                        aria-controls="panel-temp" id="tab-temp">Temperature
-                                </button>
-                                <button class="tab" type="button" role="tab" aria-selected="false"
-                                        aria-controls="panel-volume" id="tab-volume">Volume
-                                </button>
-                            </div>
 
-                        <div id="panel-distance" class="panel" role="tabpanel" tabindex="0"
-                             aria-labelledby="tab-distance">
-                            <form method="post">{% csrf_token %}
-                                <input type="hidden" name="active_tab" value="distance">
-                                <div class="grid">
-                                    <div class="card">
-                                        <h3>Distance From</h3>
-                                        <div class="form-inline">
-                                            {{ distanceform.distance_from.errors }}
-                                            {{ distanceform.distance_from }}
-                                            {{ distanceform.unit_from }}
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <h3>Distance To</h3>
-                                        <div class="form-inline">
-                                            <input type="text" name="distance_to" value="{{ distance_to }}"
-                                                   style="width: 8em;" id="id_distance_to" readonly>
-                                            {{ distanceform.unit_to }}
-                                        </div>
-                                        <div style="display:inline-block;">
-                                            <button class="button bruh" type="submit">Submit</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                        <div class="tablist" role="tablist" aria-label="Pop Menu">
+                            <button class="tab" type="button" role="tab"
+                                    aria-controls="panel-distance" id="tab-distance"
+                                    onclick="window.location.href='{% url 'convert_distance' %}'">
+                                Distance
+                            </button>
+                            <button class="tab" type="button" role="tab" aria-selected="true"
+                                    aria-controls="panel-temperature" id="tab-temperature"
+                                    onclick="window.location.href='{% url 'convert_temperature' %}'">
+                                Temperature
+                            </button>
+                            <button class="tab" type="button" role="tab"
+                                    aria-controls="panel-volume" id="tab-volume"
+                                    onclick="window.location.href='{% url 'convert_volume' %}'">
+                                Volume
+                            </button>
                         </div>
 
-                        <div id="panel-temp" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-temp"
-                             hidden>
+
+                        <div id="panel-temp" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-temp">
                             <form method="post">{% csrf_token %}
-                                <input type="hidden" name="active_tab" value="temperature">
+                                <input type="hidden" value="temperature">
                                 <div class="grid">
                                     <div class="card">
                                         <h3>Temperature From</h3>
@@ -193,22 +165,6 @@
                                         <div style="display:inline-block;">
                                             <button class="button bruh" type="submit">Submit</button>
                                         </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div id="panel-volume" class="panel" role="tabpanel" tabindex="0"
-                             aria-labelledby="tab-volume" hidden>
-                            <form method="post">{% csrf_token %}
-                                <input type="hidden" name="active_tab" value="volume">
-                                <div class="grid">
-                                    <div class="card"><h3>Volume From</h3>
-                                        <p></p></div>
-                                    <div class="card"><h3>Volume To</h3>
-                                        <p></p></div>
-                                    <div style="display:inline-block;">
-                                        <button class="button" type="submit">Submit</button>
                                     </div>
                                 </div>
                             </form>
@@ -239,9 +195,7 @@
 
         const hashMap = {
             '#home': 'tab-home',
-            '#products': 'tab-products',
-            '#about': 'tab-about',
-            '#settings': 'tab-settings'
+            '#temp': 'tab-temp',
         };
 
     </script>
