@@ -15,12 +15,63 @@
     <script src="{% static 'js/jquery.min.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'js/main.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'js/util.js' %}" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    <style>
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+            position: relative;
+        }
+
+        .topnav #myLinks {
+            display: none;
+        }
+
+        .topnav a {
+            color: white;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            display: block;
+            font-family: 'Consolas', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace
+        }
+
+        .topnav a.icon {
+            background: black;
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .active {
+            background-color: #333;
+            color: white;
+        }
+
+
+        .topnav { display: none; }
+
+        @media (min-width: 769px) {
+            #nav { display: block !important; }
+            .topnav { display: none !important; }
+        }
+
+        @media (max-width: 768px) {
+            #nav { display: none !important; }
+            .topnav { display: block !important; }
+        }
+
+    </style>
 
 </head>
 <body class="is-preload homepage">
 <div id="page-wrapper">
-
 
     <div id="header-wrapper">
         <header id="header" class="container">
@@ -30,47 +81,40 @@
                 <h1><a href={% url 'home' %}>Back to Resume Site</a></h1>
             </div>
 
-            <!-- Nav -->
+            <!-- (mobile only) -->
+            <div class="topnav" role="navigation" aria-label="Mobile">
+                <a class="active" href="{% url 'tools_home' %}">Home</a>
+                <div id="myLinks">
+                    <a href="{% url 'tools' %}">Tools</a>
+                    <a href="{% url 'calculators' %}">Calculators</a>
+                    <a href="{% url 'etl' %}">Hell Yeah</a>
+                </div>
+                <a href="javascript:void(0);" class="icon" aria-controls="myLinks" aria-expanded="false"
+                   onclick="myFunction(this)">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+
+            <!-- Desktop -->
             <nav id="nav">
                 <ul>
-                    <!--<li class="current"><a href="{% url 'tools_home' %}">Welcome</a></li>-->
-                    <!--
-                    <li>
-                        <a class="dropotron" href="#">Dropdown</a>
-                        <ul>
-                            <li><a href="#">Lorem ipsum dolor</a></li>
-                            <li><a href="#">Magna phasellus</a></li>
-                            <li>
-                                <a href="#">Phasellus consequat</a>
-                                <ul>
-                                    <li><a href="#">Lorem ipsum dolor</a></li>
-                                    <li><a href="#">Phasellus consequat</a></li>
-                                    <li><a href="#">Magna phasellus</a></li>
-                                    <li><a href="#">Etiam dolore nisl</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    -->
                     <li class="current"><a href="{% url 'tools_home' %}">Home</a></li>
                     <li class="current"><a href="{% url 'tools' %}">Tools</a></li>
                     <li class="current"><a href="{% url 'calculators' %}">Calculators</a></li>
-
+                    <li class="current"><a href="{% url 'etl' %}">Hell Yeah</a></li>
                 </ul>
             </nav>
 
         </header>
     </div>
 
-    {% block content %}
-    {% endblock %}
+    {% block content %}{% endblock %}
+
     <!-- Footer -->
     <div id="footer-wrapper">
         <footer id="footer" class="container">
             <div class="row">
                 <div class="col-3 col-6-medium col-12-small">
-
-                    <!-- Links -->
                     <section class="widget links">
                         <h3>Do You Ever Feel</h3>
                         <ul class="style2">
@@ -80,11 +124,8 @@
                             <li><a href="#">Do you ever feel? Feel so paper thin.</a></li>
                         </ul>
                     </section>
-
                 </div>
                 <div class="col-3 col-6-medium col-12-small">
-
-                    <!-- Links -->
                     <section class="widget links">
                         <h3>A storm is threatening</h3>
                         <ul class="style2">
@@ -95,11 +136,8 @@
                             <li><a href="#">It's just a shot away</a></li>
                         </ul>
                     </section>
-
                 </div>
                 <div class="col-3 col-6-medium col-12-small">
-
-                    <!-- Links -->
                     <section class="widget links">
                         <h3>The Midnight Runner</h3>
                         <ul class="style2">
@@ -110,24 +148,20 @@
                             <li><a href="#">Midnight runner</a></li>
                         </ul>
                     </section>
-
                 </div>
                 <div class="col-3 col-6-medium col-12-small">
-
-                    <!-- Contact -->
                     <section class="widget contact last">
                         <h3>Contact Me</h3>
                         <ul>
                             <li>
-                                <img style="max-width: 80%; border-radius: 25px;" class="image" src="{% static 'images/banana.jpg' %}" alt=""/>
+                                <img style="max-width: 80%; border-radius: 25px;" class="image"
+                                     src="{% static 'images/banana.jpg' %}" alt=""/>
                             </li>
                         </ul>
                         <p>123 S 123rd Street<br/>
                             Omaha, NE 68105<br/>
                             (123) 456-7890</p>
                     </section>
-
-
                 </div>
             </div>
             <div class="row">
@@ -143,5 +177,13 @@
         </footer>
     </div>
 </div>
+<script>
+    function myFunction(btn) {
+        var x = document.getElementById("myLinks");
+        var isOpen = x.style.display === "block";
+        x.style.display = isOpen ? "none" : "block";
+        if (btn) btn.setAttribute("aria-expanded", isOpen ? "false" : "true");
+    }
+</script>
 </body>
 </html>

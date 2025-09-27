@@ -2,7 +2,14 @@
 {% load static %}
 {% block content %}
 
-
+<style>
+.type_shit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 15vh;
+}
+</style>
     <!-- Banner -->
     <div id="banner-wrapper">
         <div id="banner" class="box container">
@@ -11,6 +18,9 @@
                     <h2>Hi. Feel Free to Peruse</h2>
                     <p>I built this site in my free time to stay fresh with my Python skills and
                         as a portfolio site I suppose. UNDER CONSTRUCTION.</p>
+                    <div class="type_shit">
+                    <img src="{% static 'images/IMG_0686.png' %}" alt="" style="max-width: 80%; max-height: 300px;">
+                    </div>
                 </div>
             </div>
         </div>

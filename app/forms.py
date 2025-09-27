@@ -1,6 +1,7 @@
 import datetime
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.core.validators import FileExtensionValidator
 from django.forms import ModelForm, Textarea, TextInput, formset_factory, modelformset_factory, BaseModelFormSet, \
     NumberInput
 from app.models import *
@@ -61,7 +62,8 @@ class DateForm2(forms.Form):
 
     math_type = forms.ChoiceField(choices=math_choices)
     date_between = forms.DateField(label='Start Date', initial=datetime.datetime.now(),
-                                   widget=forms.SelectDateWidget(years=range(600, 2250), attrs={'style': 'width: 10em;'}))
+                                   widget=forms.SelectDateWidget(years=range(600, 2250),
+                                                                 attrs={'style': 'width: 10em;'}))
 
     day = forms.IntegerField(label='Days', min_value=0, max_value=2500,
                              widget=forms.TextInput(attrs={'style': 'width: 10em;'}))
@@ -94,7 +96,6 @@ class DistanceForm(forms.Form):
             forms.HiddenInput()
         ))
 
-
     distance_from = forms.DecimalField(
         min_value=-99999,
         max_value=99999,
@@ -102,8 +103,6 @@ class DistanceForm(forms.Form):
         decimal_places=9,
         widget=forms.TextInput(attrs={'style': 'width: 8em;'})
     )
-
-
 
     # imperial
     DISTANCE_CHOICES = (
@@ -141,6 +140,7 @@ class DistanceForm(forms.Form):
         widget=forms.Select(attrs={'style': 'width: 14em;'})
     )
 
+
 class TemperatureForm(forms.Form):
     ##### TEMPERATURE
     temperature_to = forms.DecimalField(
@@ -153,7 +153,6 @@ class TemperatureForm(forms.Form):
         disabled=True,
         widget=forms.TextInput(attrs={'style': 'width: 8em;', 'readonly': 'readonly'})
     )
-
 
     temperature_from = forms.DecimalField(
         min_value=-99999,
@@ -181,7 +180,6 @@ class TemperatureForm(forms.Form):
     )
 
 
-
 class VolumeForm(forms.Form):
     #### Volume
     ##### TEMPERATURE
@@ -195,7 +193,6 @@ class VolumeForm(forms.Form):
         disabled=True,
         widget=forms.TextInput(attrs={'style': 'width: 8em;', 'readonly': 'readonly'})
     )
-
 
     volume_from = forms.DecimalField(
         min_value=-99999,
@@ -233,4 +230,16 @@ class VolumeForm(forms.Form):
     unit_to = forms.ChoiceField(
         choices=VOLUME_CHOICES,
         widget=forms.Select(attrs={'style': 'width: 14em;'})
+    )
+
+
+class ETLForm(forms.Form):
+    file_uploads = forms.FileField(
+        required=True,
+        help_text=".csv files only! 2MB file size max!",
+        validators=[FileExtensionValidator(allowed_extensions=["csv"])],
+        error_messages={
+            "required": "Please select a file to upload.",
+            "invalid": "This is not a valid file.",
+        },
     )

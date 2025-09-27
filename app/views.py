@@ -694,7 +694,6 @@ def convert_volume(request):
             unit_from = volumeform.cleaned_data['unit_from']
             unit_to = volumeform.cleaned_data['unit_to']
 
-
             volume_to = convert_volume_bruh(volume_from, unit_from, unit_to)
 
             return render(request, 'convert_volume.html', {'volumeform': volumeform,
@@ -706,3 +705,25 @@ def convert_volume(request):
         volumeform = VolumeForm()
 
     return render(request, 'convert_volume.html', {'volumeform': volumeform})
+
+
+def etl(request):
+    getipaddress(request)
+    if request.method == "POST":
+        csv_upload = ETLForm(request.POST, request.FILES)
+        print(csv_upload)
+
+        if csv_upload.is_valid():
+            uploaded_file = csv_upload.cleaned_data["document"]
+            file_name = uploaded_file.name
+            file_size = uploaded_file.size
+
+            print(file_name,file_size)
+
+            return render(request, 'etl_demo.html', {"csv_upload": csv_upload})
+
+    else:
+        csv_upload = ETLForm()
+
+    return render(request, 'etl_demo.html', {"csv_upload": csv_upload})
+
