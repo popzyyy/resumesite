@@ -16,7 +16,7 @@ import time
 from datetime import datetime as dt, timedelta
 from app.conversions import *
 from decimal import Decimal, ROUND_HALF_UP
-import pandas as pd
+#import pandas as pd
 
 
 def refresh(request):
