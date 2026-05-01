@@ -16,6 +16,7 @@ import time
 from datetime import datetime as dt, timedelta
 from app.conversions import *
 from decimal import Decimal, ROUND_HALF_UP
+import pandas as pd
 
 
 def refresh(request):
@@ -709,21 +710,44 @@ def convert_volume(request):
 
 def etl(request):
     getipaddress(request)
+
+    table_html = None
+    page_obj = None
+
+    csv_upload = ETLForm()
+
     if request.method == "POST":
         csv_upload = ETLForm(request.POST, request.FILES)
-        print(csv_upload)
 
         if csv_upload.is_valid():
-            uploaded_file = csv_upload.cleaned_data["document"]
-            file_name = uploaded_file.name
-            file_size = uploaded_file.size
+            uploaded_file = csv_upload.cleaned_data["file_uploads"]
+            df = pd.read_csv(uploaded_file)
+            print(df.head())
 
-            print(file_name,file_size)
+            request.session["etl_rows"] = df.to_dict(orient="records")
+            request.session["etl_cols"] = list(df.columns)
 
-            return render(request, 'etl_demo.html', {"csv_upload": csv_upload})
+    rows = request.session.get("etl_rows")
+    cols = request.session.get("etl_cols")
 
-    else:
-        csv_upload = ETLForm()
+    if rows and cols:
+        df = pd.DataFrame(rows, columns=cols)
+        page_number = request.GET.get("page", 1)
 
-    return render(request, 'etl_demo.html', {"csv_upload": csv_upload})
+        paginator = Paginator(df.values.tolist(), 10)
+        page_obj = paginator.get_page(page_number)
 
+        df_page = pd.DataFrame(page_obj.object_list, columns=df.columns)
+
+        table_html = df_page.to_html(classes="table table-bordered", index=False)
+        print(table_html)
+
+    return render(
+        request,
+        "etl_demo.html",
+        {
+            "csv_upload": csv_upload,
+            "table_html": table_html,
+            "page_obj": page_obj,
+        },
+    )

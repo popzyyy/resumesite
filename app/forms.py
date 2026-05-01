@@ -235,11 +235,17 @@ class VolumeForm(forms.Form):
 
 class ETLForm(forms.Form):
     file_uploads = forms.FileField(
+        label=".csv files only! 2MB file size max!",
         required=True,
-        help_text=".csv files only! 2MB file size max!",
         validators=[FileExtensionValidator(allowed_extensions=["csv"])],
         error_messages={
             "required": "Please select a file to upload.",
-            "invalid": "This is not a valid file.",
+            "invalid": "This is not a valid file. .csvs only",
         },
     )
+
+    def size_validator(self):
+        file = self.cleaned_data["file_uploads"]
+        if file.size > 2 * 1024 * 1024:
+            raise forms.ValidationError("File is too large. Max size is 2MB.")
+        return file

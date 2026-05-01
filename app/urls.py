@@ -23,7 +23,8 @@ urlpatterns = [
     path('convert_distance/', views.convert_distance, name='convert_distance'),
     path('convert_temperature/', views.convert_temperature, name='convert_temperature'),
     path('convert_volume/', views.convert_volume, name='convert_volume'),
-    path('etl_demo/', views.etl, name='etl')
+    path('etl/', views.etl, name='etl'),
+
 ]
 
 if settings.DEBUG:

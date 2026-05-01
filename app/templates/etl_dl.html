@@ -1,0 +1,81 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+    <div id="banner-wrapper">
+        <div id="banner" class="box container">
+
+            <h2>ETL</h2>
+
+            <div class="row">
+                {% if table_html %}
+                    {{ table_html|safe }}
+                {% else %}
+                    <p>No data ¯\_(ツ)_/¯</p>
+                {% endif %}
+
+            </div>
+
+            {% if page_obj %}
+                <div class="pagination"
+                     style="display: flex; flex-direction: column; align-items: center;padding-top: .75em; font-size: 1em">
+                    <span class="step-links">
+
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1">&laquo; First </a>
+                            <a href="?page={{ page_obj.previous_page_number }}">Previous </a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}">Next </a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                        {% endif %}
+
+                    </span>
+                </div>
+            {% endif %}
+
+            <div class="col-12">
+
+
+                {% if table_html %}
+                    {{ table_html|safe }}
+                {% else %}
+                    <p>No data ¯\_(ツ)_/¯</p>
+                {% endif %}
+
+            </div>
+
+            {% if page_obj %}
+                <div class="pagination"
+                     style="display: flex; flex-direction: column; align-items: center;padding-top: .75em; font-size: 1em">
+                    <span class="step-links">
+
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1">&laquo; First </a>
+                            <a href="?page={{ page_obj.previous_page_number }}">Previous </a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}">Next </a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                        {% endif %}
+
+                    </span>
+                </div>
+            {% endif %}
+
+
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

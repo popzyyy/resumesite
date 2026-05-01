@@ -1,51 +1,199 @@
 {% extends 'main.html' %}
 {% load static %}
 {% block content %}
+
     <style>
-        .formset-container {
-            display: inline-block;
-            margin-right: 10px;
-            margin-bottom: 20px;
+        .row-50-50 {
+            display: flex;
         }
 
-        .textarea {
-            width: 100%;
-            height: 15em;
-            margin: 2px;
-            padding: 2em;
-            border: 0;
-        }
-
-        #id_text {
-            outline: 3px solid black;
-            width: 100%;
-            height: 100%;
+        .row-50-50 > flexed {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
         }
     </style>
 
     <div id="banner-wrapper">
         <div id="banner" class="box container">
 
-            <h2>ETL Example </h2>
+            {% if page_obj %}
+                <h2>ETL (Transform)</h2>
+            {% endif %}
+            {% if not page_obj %}
+                <h2>ETL (Extract)</h2>
+            {% endif %}
+            {% if table_html %}
+                <div class="row">
+                    <div class="col-12">
 
-            <div class="row">
-                <div class="col-12">
+                        <form id="form-container"
+                              class="row"
+                              method="POST"
+                              enctype="multipart/form-data">
+                            {% csrf_token %}
 
-                    <form id="form-container" class="row" method="POST">
-                        {% csrf_token %}
-                        {{ csv_upload.errors }}
-                        {{ csv_upload.file_uploads }}
-                        <div class="row">
-                            <div style="padding-top: 4em; display: inline-block;">
-                                <button class="button" type="submit">Find Out</button>
-                            </div>
+                            <div class="row-50-50">
+                                <flexed>
+                                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                                        <h3>Wanna Upload Another .csv File?</h3>
+                                        {{ csv_upload.file_uploads }}
 
-                        </div>
-                    </form>
+                                        {% if csv_upload.file_uploads.errors %}
+                                            <div class="error-message">
+
+                                                {% for error in csv_upload.file_uploads.errors %}
+                                                    <h3>{{ error }}</h3>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="row">
+                                        <div style="padding-top: 4em; display: inline-block;">
+                                            <button class="button" type="submit">Submit</button>
+                                        </div>
+                                    </div>
+                                </flexed>
+                        </form>
+                        <flexed>
+                            <button class="button" type="submit">Submit</button>
+                        </flexed>
+                        <flexed>
+                            <button class="button" type="submit">Submit</button>
+                        </flexed>
+                        <flexed>
+                            <button class="button" type="submit">Submit</button>
+                        </flexed>
+                        <flexed>
+                            <button class="button" type="submit">Submit</button>
+                        </flexed>
+
+                    {% if csv_html %}
+                        {{ csv_html }}
+                    {% endif %}
 
                 </div>
+                {% if page_obj %}
+                    <div class="pagination"
+                         style="display: flex; flex-direction: column; align-items: center;padding-top: .75em; font-size: 1em">
+                    <span class="step-links">
+
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1">&laquo; First </a>
+                            <a href="?page={{ page_obj.previous_page_number }}">Previous </a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}">Next </a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                        {% endif %}
+
+                    </span>
+                    </div>
+                {% endif %}
+
+                <div class="col-12">
+
+
+                    {% if table_html %}
+                        {{ table_html|safe }}
+                    {% endif %}
+
+                </div>
+
+                {% if page_obj %}
+                    <div class="pagination"
+                         style="display: flex; flex-direction: column; align-items: center;padding-top: .75em; font-size: 1em">
+                    <span class="step-links">
+
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1">&laquo; First </a>
+                            <a href="?page={{ page_obj.previous_page_number }}">Previous </a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}">Next </a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                        {% endif %}
+
+                    </span>
+                    </div>
+                {% endif %}
+
+
+                </div>
+                </div>
+                </div>
+            {% endif %}
+
+
+
+
+
+
+
+
+
+
+    {% if not table_html %}
+        <div class="row">
+            <div class="col-12">
+
+                <form id="form-container"
+                      class="row"
+                      method="POST"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if csv_upload.non_field_errors %}
+                        <div class="error-message">
+                            {% for error in csv_upload.non_field_errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label for="{{ csv_upload.file_uploads.id_for_label }}">
+                            {{ csv_upload.file_uploads.label }}
+                        </label><br>
+
+                        {{ csv_upload.file_uploads }}
+
+
+                        {% if csv_upload.file_uploads.errors %}
+                            <div class="error-message">
+                                {% for error in csv_upload.file_uploads.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <div style="padding-top: 4em; display: inline-block;">
+                            <button class="button" type="submit">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+                {% if csv_html %}
+                    {{ csv_html }}
+                {% endif %}
+
             </div>
         </div>
-    </div>
+
+    {% endif %}
+
 
 {% endblock %}
